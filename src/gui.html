@@ -1,0 +1,134 @@
+<div>
+    <div v-if="context.userId !== data.ownerId" style="color: red;">
+        You don't have permissions to open this application session.
+    </div>
+
+    <div v-if="context.userId === data.ownerId">
+        <sly-style>
+            #ai-assisted-tagging {
+
+            }
+            #small_table.tiny-table table thead th {
+            font-size: 10px;
+            }
+            #small_table.tiny-table table {
+            font-size: 11px;
+            }
+            #small_tabs .el-tabs__item {
+            font-size: 10px;
+            font-weight: 500;
+            height: 30px;
+            line-height: 30px;
+            }
+            #small_tabs .el-tabs__header {
+            background: white;
+            }
+
+            #ai-assisted-tagging .app-header {
+            background: white;
+            }
+
+            #ai-assisted-tagging .grid-gallery-views-scene.img-grid-gallery {
+            z-index: 0;
+            }
+
+            #ai-assisted-tagging {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            }
+            #ai-assisted-tagging .el-tabs {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 60px);
+            }
+            #ai-assisted-tagging .el-tabs__content {
+            overflow: scroll;
+            }
+
+            #ai-assisted-tagging .el-tabs__header {
+            margin-bottom: 0
+            }
+        </sly-style>
+
+
+        <div id="ai-assisted-tagging" class="ml5 mr10" v-if="context.userId === data.ownerId" style="margin-left: 2px; margin-right: 2px;">
+            <div class="app-header">
+                <div class="ml5"><b>ACTIONS:</b></div>
+                <el-button type="success" size="mini" class="mt5 ml5 mb5"
+                           :disabled="!state.selectedItem"
+                           @click="command('assign_tag')">
+                    <i class="zmdi zmdi-plus-circle mr5"></i>Assign Tag (alt+t)
+                </el-button>
+            </div>
+
+            <el-tabs id="small_tabs" v-model="state.tabName">
+                <el-tab-pane label="PREDICTIONS" name="predictions">
+                    <span slot="label"><i class="zmdi zmdi-fire mr5"></i>PREDICTIONS</span>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+                    <div>123</div>
+<!--                    <sly-grid-gallery-->
+<!--                            v-model="state.selectedItem"-->
+<!--                            :content="data.gallery.content"-->
+<!--                            :options="data.gallery.options"-->
+<!--                    >-->
+<!--                        <template v-slot:card-footer="{ annotation }">-->
+<!--                            <i class="zmdi zmdi-label mr5" :style="{color: annotation.tag.color}"></i>-->
+<!--                            <b>{{annotation.tag.name}}</b><span-->
+<!--                                v-if="annotation.tag.value">:{{annotation.tag.value}}</span>-->
+<!--                        </template>-->
+<!--                    </sly-grid-gallery>-->
+                </el-tab-pane>
+                <el-tab-pane label="REVIEW" name="review">
+                    <span slot="label"><i class="zmdi zmdi-view-dashboard mr5"></i>REVIEW</span>
+                </el-tab-pane>
+                <el-tab-pane label="SETTINGS" name="settings">
+                    <span slot="label"><i class="zmdi zmdi-settings mr5"></i>SETTINGS</span>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+
+    </div>
+</div>
