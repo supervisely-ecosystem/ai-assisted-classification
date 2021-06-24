@@ -60,8 +60,8 @@
         </sly-style>
 
         <div v-if="context.userId === data.ownerId && !data.connected">
-            <sly-field title="Connect to running NN"
-                       description="Define session (task id) with deployed model"
+            <sly-field title="Connect to running classification NN"
+                       description="Select one of the deployed classification models"
                        style="margin-left: 5px;"
             >
                 <sly-icon slot="icon" :options="{ color: '#2cd26e', bgColor: '#d8f8e7', rounded: false }">
@@ -115,7 +115,8 @@
                                 <template slot="title">
                                     <span><i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}</span>
                                 </template>
-                                <sly-image-slider v-if="data.info" :data="data.tagsExamples[tag.name]"/>
+<!--                                <div>{{data.tagsExamples[tag.name]}}</div>-->
+                                <sly-image-slider :data="data.tagsExamples[tag.name]"/>
                             </el-collapse-item>
                         </el-collapse>
                     </div>

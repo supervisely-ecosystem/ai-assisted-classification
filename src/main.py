@@ -22,11 +22,15 @@ def set_model_info(task_id, api, info, tag_metas, tags_examples):
             sly.logger.warning(f"There are no examples for tag \"{tag_meta.name}\"")
             tags_examples[tag_meta.name] = []
 
+    examples_data = defaultdict(list)
+    for name, urls in tags_examples.items():
+        examples_data[name] = [{"moreExamples": [url], "preview": url} for url in urls]
+
     fields = [
         {"field": "data.connected", "payload": True},
         {"field": "data.info", "payload": info},
         {"field": "data.tags", "payload": tag_metas.to_json()},
-        {"field": "data.tagsExamples", "payload": tags_examples}
+        {"field": "data.tagsExamples", "payload": examples_data}
     ]
     api.app.set_fields(task_id, fields)
     pass
