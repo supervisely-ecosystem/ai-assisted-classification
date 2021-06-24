@@ -25,12 +25,6 @@ def connect(api: sly.Api, task_id, context, state, app_logger):
     tags_examples = api.task.send_request(state["sessionId"], "get_tags_examples", data={})
     ui.set_model_info(task_id, api, model_info, model_meta.tag_metas, tags_examples)
 
-    # meta_json = api.task.send_request(state["sessionId"], "get_output_classes_and_tags", data={})
-    # model_meta = sly.ProjectMeta.from_json(meta_json)
-    #
-    # inf_settings = api.task.send_request(state["sessionId"], "get_custom_inference_settings", data={})
-    #
-    # ui.set_model_info(api, task_id, model_meta, info, inf_settings)
 
 #
 #
