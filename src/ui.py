@@ -4,6 +4,8 @@ import supervisely_lib as sly
 
 
 def init(data, state):
+    state["connecting"] = False
+
     data["ownerId"] = g.owner_id
     data["teamId"] = g.team_id
     data["ssOptions"] = {
@@ -60,6 +62,7 @@ def set_model_info(task_id, api, info, tag_metas, tags_examples):
 
     fields = [
         {"field": "data.connected", "payload": True},
+        {"field": "state.connecting", "payload": False},
         {"field": "data.info", "payload": info},
         {"field": "data.tags", "payload": tag_metas.to_json()},
         {"field": "data.tagsExamples", "payload": g.examples_data},

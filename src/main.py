@@ -18,12 +18,16 @@ import ui
 def connect(api: sly.Api, task_id, context, state, app_logger):
     global model_meta, model_info, tag_examples
 
-    model_info = api.task.send_request(state["sessionId"], "get_session_info", data={})
-    model_meta = sly.ProjectMeta.from_json(
-        api.task.send_request(state["sessionId"], "get_model_meta", data={})
-    )
-    tags_examples = api.task.send_request(state["sessionId"], "get_tags_examples", data={})
-    ui.set_model_info(task_id, api, model_info, model_meta.tag_metas, tags_examples)
+    try:
+        model_info = api.task.send_request(state["sessionId"], "get_session_info", data={})
+        model_meta = sly.ProjectMeta.from_json(
+            api.task.send_request(state["sessionId"], "get_model_meta", data={})
+        )
+        tags_examples = api.task.send_request(state["sessionId"], "get_tags_examples", data={})
+        ui.set_model_info(task_id, api, model_info, model_meta.tag_metas, tags_examples)
+    except Exception as e:
+        api.task.set_field(task_id, "state.connecting", False)
+        raise e
 
 
 #
