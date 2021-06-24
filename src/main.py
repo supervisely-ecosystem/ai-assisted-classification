@@ -15,20 +15,29 @@ import ui
 # ann_cache = defaultdict(list)  # only one (current) image in cache
 
 
+def set_model_info(task_id, api, info, meta):
+    fields = [
+        {"field": "data.connected", "payload": True},
+        {"field": "data.info", "payload": info},
+        {"field": "data.tags", "payload": meta},
+    ]
+    api.app.set_fields(task_id, fields)
+    pass
+
+
 @g.my_app.callback("connect")
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def connect(api: sly.Api, task_id, context, state, app_logger):
     global model_meta, model_info
 
-    info = api.task.send_request(state["sessionId"], "get_session_info", data={})
-    app_logger.debug("Session Info", extra={"info": info})
+    model_info = api.task.send_request(state["sessionId"], "get_session_info", data={})
+    app_logger.debug("Session Info", extra={"info": model_info})
 
-    fields = [
-        {"field": "data.connected", "payload": True},
-        {"field": "data.info", "payload": info},
-    ]
-    api.app.set_fields(task_id, fields)
+    model_meta_json = api.task.send_request(state["sessionId"], "get_model_meta", data={})
+    model_meta = sly.ProjectMeta.from_json(model_meta_json)
+
+    set_model_info(task_id, api, model_info, model_meta.tag_metas.to_json())
 
     # meta_json = api.task.send_request(state["sessionId"], "get_output_classes_and_tags", data={})
     # model_meta = sly.ProjectMeta.from_json(meta_json)
@@ -150,6 +159,8 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
+
+#@TODO: get errors from serve
 #@TODO: connect loading ...
 if __name__ == "__main__":
     sly.main_wrapper("main", main)

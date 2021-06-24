@@ -51,11 +51,19 @@
             #ai-assisted-tagging .el-tabs__header {
             margin-bottom: 0
             }
+
+            #ai-assisted-tagging .xxx .el-collapse-item__header {
+            height: 30px;
+            line-height: 30px;
+            }
+
         </sly-style>
 
         <div v-if="context.userId === data.ownerId && !data.connected">
             <sly-field title="Connect to running NN"
-                       description="Define session (task id) with deployed model">
+                       description="Define session (task id) with deployed model"
+                       style="margin-left: 5px;"
+            >
                 <sly-icon slot="icon" :options="{ color: '#2cd26e', bgColor: '#d8f8e7', rounded: false }">
                     <i class="zmdi zmdi-compass"></i>
                 </sly-icon>
@@ -75,11 +83,6 @@
                 </div>
             </sly-field>
             <hr style="border: 0; border-top: 1px solid rgba(0,0,0,.12); margin-bottom: 15px;"/>
-            <sly-notification
-                    v-if="data.connectionError.length > 0"
-                    :options="{'name': 'Connection Error', 'type': 'error'}"
-                    :content="data.connectionError">
-            </sly-notification>
         </div>
         <div id="ai-assisted-tagging"
              v-if="context.userId === data.ownerId && data.connected"
@@ -98,8 +101,23 @@
             <el-tabs id="small_tabs" v-model="state.tabName">
                 <el-tab-pane label="INFO" name="info">
                     <span slot="label"><i class="zmdi zmdi-info mr5"></i></i>INFO</span>
-                    <div v-for="v,k in data.info" class="mb5" style="word-break: break-all;">
-                        <b style="color: #777777;">{{k}}</b>: {{v}}
+                    <div class="mt5 ml5 mr5">
+                        <div><b>SESSION INFO:</b></div>
+                        <div v-for="v,k in data.info" class="mt5" style="word-break: break-all;">
+                            <b style="color: #777777;">{{k}}</b>: {{v}}
+                        </div>
+
+                        <div class="mt10"><b>MODEL TAGS AND THEIR EXAMPLES:</b></div>
+<!--                        <pre>{{data.tags}}</pre>-->
+<!--                        <pre>{{state.activeNames}}</pre>-->
+                        <el-collapse class="xxx" v-model="state.activeNames" v-if="data.tags">
+                            <el-collapse-item v-for="tag in data.tags" :name="tag.name">
+                                <template slot="title">
+                                    <span>{{tag.name}}</span>
+                                </template>
+                                <div>123 {{tag.name}}</div>
+                            </el-collapse-item>
+                        </el-collapse>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="PREDICTIONS" name="predictions">
@@ -146,17 +164,17 @@
                     <div>123</div>
                     <div>123</div>
                     <div>123</div>
-<!--                    <sly-grid-gallery-->
-<!--                            v-model="state.selectedItem"-->
-<!--                            :content="data.gallery.content"-->
-<!--                            :options="data.gallery.options"-->
-<!--                    >-->
-<!--                        <template v-slot:card-footer="{ annotation }">-->
-<!--                            <i class="zmdi zmdi-label mr5" :style="{color: annotation.tag.color}"></i>-->
-<!--                            <b>{{annotation.tag.name}}</b><span-->
-<!--                                v-if="annotation.tag.value">:{{annotation.tag.value}}</span>-->
-<!--                        </template>-->
-<!--                    </sly-grid-gallery>-->
+                    <!--                    <sly-grid-gallery-->
+                    <!--                            v-model="state.selectedItem"-->
+                    <!--                            :content="data.gallery.content"-->
+                    <!--                            :options="data.gallery.options"-->
+                    <!--                    >-->
+                    <!--                        <template v-slot:card-footer="{ annotation }">-->
+                    <!--                            <i class="zmdi zmdi-label mr5" :style="{color: annotation.tag.color}"></i>-->
+                    <!--                            <b>{{annotation.tag.name}}</b><span-->
+                    <!--                                v-if="annotation.tag.value">:{{annotation.tag.value}}</span>-->
+                    <!--                        </template>-->
+                    <!--                    </sly-grid-gallery>-->
                 </el-tab-pane>
                 <el-tab-pane label="REVIEW" name="review">
                     <span slot="label"><i class="zmdi zmdi-view-dashboard mr5"></i>REVIEW</span>

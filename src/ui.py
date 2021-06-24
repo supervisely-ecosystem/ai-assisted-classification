@@ -11,17 +11,16 @@ def init(data, state):
     }
     state["sessionId"] = 5857  # None @TODO: for debug
 
-    data["info"] = {}
-    data["classes"] = []
-    data["tags"] = []
+    data["info"] = None
+    data["tags"] = None
     data["connected"] = False
-    data["connectionError"] = ""
-    data["rollbackIds"] = []
-    data["ssOptions"] = {
-        "sessionTags": ["deployed_nn"],
-        "showLabel": False,
-        "size": "mini"
-    }
+    # data["connectionError"] = ""
+    # data["rollbackIds"] = []
+    # data["ssOptions"] = {
+    #     "sessionTags": ["deployed_nn"],
+    #     "showLabel": False,
+    #     "size": "mini"
+    # }
 
     state["sessionId"] = ""
     state["classes"] = []
@@ -31,5 +30,7 @@ def init(data, state):
     state["settings"] = "# empty"
     state["addMode"] = "merge"
     state["processing"] = False
+
+    state["activeNames"] = []
 
 
