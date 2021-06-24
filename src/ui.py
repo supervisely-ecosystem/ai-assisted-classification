@@ -1,5 +1,16 @@
+import globals as g
 
-def init_ui(data, state):
+
+def init(data, state):
+    data["ownerId"] = g.owner_id
+    data["teamId"] = g.team_id
+    data["ssOptions"] = {
+        "sessionTags": ["deployed_nn_cls"],
+        "showLabel": False,
+        "size": "mini"
+    }
+    state["sessionId"] = 5857  # None @TODO: for debug
+
     data["info"] = {}
     data["classes"] = []
     data["tags"] = []
