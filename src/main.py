@@ -3,6 +3,7 @@ import yaml
 import pathlib
 import sys
 from collections import defaultdict
+import globals as g
 import supervisely_lib as sly
 
 
@@ -12,18 +13,23 @@ import ui
 # from shared_utils.inference import postprocess
 
 
+# ann_cache = defaultdict(list)  # only one (current) image in cache
 
 
+@g.my_app.callback("connect")
+@sly.timeit
+def connect(api: sly.Api, task_id, context, state, app_logger):
+    global model_meta, model_info
 
+    info = api.task.send_request(state["sessionId"], "get_session_info", data={})
+    app_logger.debug("Session Info", extra={"info": info})
 
-ann_cache = defaultdict(list)  # only one (current) image in cache
-
-
-# @g.my_app.callback("connect")
-# @sly.timeit
-# def connect(api: sly.Api, task_id, context, state, app_logger):
-#     global model_meta, model_info
-#     #model_meta = get_model_info(api, task_id, context, state, app_logger)
+    # meta_json = api.task.send_request(state["sessionId"], "get_output_classes_and_tags", data={})
+    # model_meta = sly.ProjectMeta.from_json(meta_json)
+    #
+    # inf_settings = api.task.send_request(state["sessionId"], "get_custom_inference_settings", data={})
+    #
+    # ui.set_model_info(api, task_id, model_meta, info, inf_settings)
 #
 #
 #
