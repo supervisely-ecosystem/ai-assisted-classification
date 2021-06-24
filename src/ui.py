@@ -39,6 +39,12 @@ def init(data, state):
     state["activeNames"] = []
 
 
+    # settings
+    state["topN"] = 5
+    state["applyTo"] = "image"
+    state["assignMode"] = "append"
+
+
 def set_model_info(task_id, api, info, tag_metas, tags_examples):
     g.model_tag_names = []
     for tag_meta in tag_metas:

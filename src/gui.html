@@ -137,65 +137,30 @@
                 </el-tab-pane>
                 <el-tab-pane label="PREDICTIONS" name="predictions">
                     <span slot="label"><i class="zmdi zmdi-fire mr5"></i>PREDICTIONS</span>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <div>123</div>
-                    <!--                    <sly-grid-gallery-->
-                    <!--                            v-model="state.selectedItem"-->
-                    <!--                            :content="data.gallery.content"-->
-                    <!--                            :options="data.gallery.options"-->
-                    <!--                    >-->
-                    <!--                        <template v-slot:card-footer="{ annotation }">-->
-                    <!--                            <i class="zmdi zmdi-label mr5" :style="{color: annotation.tag.color}"></i>-->
-                    <!--                            <b>{{annotation.tag.name}}</b><span-->
-                    <!--                                v-if="annotation.tag.value">:{{annotation.tag.value}}</span>-->
-                    <!--                        </template>-->
-                    <!--                    </sly-grid-gallery>-->
                 </el-tab-pane>
                 <el-tab-pane label="REVIEW" name="review">
                     <span slot="label"><i class="zmdi zmdi-view-dashboard mr5"></i>REVIEW</span>
                 </el-tab-pane>
                 <el-tab-pane label="SETTINGS" name="settings">
                     <span slot="label"><i class="zmdi zmdi-settings mr5"></i>SETTINGS</span>
+                    <sly-field title="Apply to" description="Apply model to images or to objects">
+                        <el-select v-model="state.applyTo" size="small">
+                            <el-option key="image" label="image" value="image"></el-option>
+                            <el-option key="object" label="object" value="object"></el-option>
+                        </el-select>
+                    </sly-field>
+                    <sly-field title="Assign mode"
+                               description="Tag will be appended to existing ones (duplicates are allowed). Or if object
+                               or image has some of the model tags, they will be replaced"
+                    >
+                        <el-select v-model="state.assignMode" size="small">
+                            <el-option key="append" label="append" value="append"></el-option>
+                            <el-option key="replace" label="replace" value="replace"></el-option>
+                        </el-select>
+                    </sly-field>
+                    <sly-field title="Top N" description="Show only top N predictions">
+                        <el-input-number size="small" v-model="state.topN" :min="1"></el-input-number>
+                    </sly-field>
                 </el-tab-pane>
             </el-tabs>
         </div>
