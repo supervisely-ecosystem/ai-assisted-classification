@@ -1,5 +1,4 @@
 import os
-import yaml
 import pathlib
 import sys
 from collections import defaultdict
@@ -18,11 +17,18 @@ import ui
 
 @g.my_app.callback("connect")
 @sly.timeit
+@g.my_app.ignore_errors_and_show_dialog_window()
 def connect(api: sly.Api, task_id, context, state, app_logger):
     global model_meta, model_info
 
     info = api.task.send_request(state["sessionId"], "get_session_info", data={})
     app_logger.debug("Session Info", extra={"info": info})
+
+    fields = [
+        {"field": "data.connected", "payload": True},
+        {"field": "data.info", "payload": info},
+    ]
+    api.app.set_fields(task_id, fields)
 
     # meta_json = api.task.send_request(state["sessionId"], "get_output_classes_and_tags", data={})
     # model_meta = sly.ProjectMeta.from_json(meta_json)
@@ -144,6 +150,6 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
-
+#@TODO: connect loading ...
 if __name__ == "__main__":
     sly.main_wrapper("main", main)

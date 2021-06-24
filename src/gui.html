@@ -53,7 +53,7 @@
             }
         </sly-style>
 
-        <div v-if="context.userId === data.ownerId && !data.modelSessionId">
+        <div v-if="context.userId === data.ownerId && !data.connected">
             <sly-field title="Connect to running NN"
                        description="Define session (task id) with deployed model">
                 <sly-icon slot="icon" :options="{ color: '#2cd26e', bgColor: '#d8f8e7', rounded: false }">
@@ -82,7 +82,7 @@
             </sly-notification>
         </div>
         <div id="ai-assisted-tagging"
-             v-if="context.userId === data.ownerId && data.modelSessionId"
+             v-if="context.userId === data.ownerId && data.connected"
              class="ml5 mr10"
              style="margin-left: 2px; margin-right: 2px;"
         >
@@ -96,6 +96,12 @@
             </div>
 
             <el-tabs id="small_tabs" v-model="state.tabName">
+                <el-tab-pane label="INFO" name="info">
+                    <span slot="label"><i class="zmdi zmdi-info mr5"></i></i>INFO</span>
+                    <div v-for="v,k in data.info" class="mb5" style="word-break: break-all;">
+                        <b style="color: #777777;">{{k}}</b>: {{v}}
+                    </div>
+                </el-tab-pane>
                 <el-tab-pane label="PREDICTIONS" name="predictions">
                     <span slot="label"><i class="zmdi zmdi-fire mr5"></i>PREDICTIONS</span>
                     <div>123</div>
