@@ -55,6 +55,7 @@
             #ai-assisted-tagging .xxx .el-collapse-item__header {
             height: 30px;
             line-height: 30px;
+            background: #f8f9fc;
             }
 
         </sly-style>
@@ -108,14 +109,27 @@
                         </div>
 
                         <div class="mt10"><b>MODEL TAGS AND THEIR EXAMPLES:</b></div>
-<!--                        <pre>{{data.tags}}</pre>-->
-<!--                        <pre>{{state.activeNames}}</pre>-->
+                        <div class="fflex" v-if="data.tags">
+                            <el-button type="text" size="mini"
+                                       :disabled="data.tags.length === state.activeNames.length"
+                                       @click="state.activeNames = data.modelTagNames"
+                            >
+                                <i class="zmdi zmdi-unfold-more mr5"></i>Expand all
+                            </el-button>
+                            <el-button type="text" size="mini"
+                                       :disabled="state.activeNames.length == 0"
+                                       @click="state.activeNames = []"
+                            >
+                                <i class="zmdi zmdi-unfold-less mr5"></i>Collapse all
+                            </el-button>
+                        </div>
                         <el-collapse class="xxx" v-model="state.activeNames" v-if="data.tags">
                             <el-collapse-item v-for="tag in data.tags" :name="tag.name">
                                 <template slot="title">
-                                    <span><i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}</span>
+                                    <span>
+                                        <i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}
+                                    </span>
                                 </template>
-<!--                                <div>{{data.tagsExamples[tag.name]}}</div>-->
                                 <sly-image-slider :data="data.tagsExamples[tag.name]"/>
                             </el-collapse-item>
                         </el-collapse>

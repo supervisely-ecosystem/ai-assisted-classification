@@ -12,30 +12,6 @@ import ui
 # from shared_utils.inference import postprocess
 
 
-# ann_cache = defaultdict(list)  # only one (current) image in cache
-
-
-def set_model_info(task_id, api, info, tag_metas, tags_examples):
-    for tag_meta in tag_metas:
-        tag_meta: sly.TagMeta
-        if tag_meta.name not in tags_examples:
-            sly.logger.warning(f"There are no examples for tag \"{tag_meta.name}\"")
-            tags_examples[tag_meta.name] = []
-
-    examples_data = defaultdict(list)
-    for name, urls in tags_examples.items():
-        examples_data[name] = [{"moreExamples": [url], "preview": url} for url in urls]
-
-    fields = [
-        {"field": "data.connected", "payload": True},
-        {"field": "data.info", "payload": info},
-        {"field": "data.tags", "payload": tag_metas.to_json()},
-        {"field": "data.tagsExamples", "payload": examples_data}
-    ]
-    api.app.set_fields(task_id, fields)
-    pass
-
-
 @g.my_app.callback("connect")
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
@@ -47,7 +23,7 @@ def connect(api: sly.Api, task_id, context, state, app_logger):
         api.task.send_request(state["sessionId"], "get_model_meta", data={})
     )
     tags_examples = api.task.send_request(state["sessionId"], "get_tags_examples", data={})
-    set_model_info(task_id, api, model_info, model_meta.tag_metas, tags_examples)
+    ui.set_model_info(task_id, api, model_info, model_meta.tag_metas, tags_examples)
 
     # meta_json = api.task.send_request(state["sessionId"], "get_output_classes_and_tags", data={})
     # model_meta = sly.ProjectMeta.from_json(meta_json)
@@ -55,6 +31,7 @@ def connect(api: sly.Api, task_id, context, state, app_logger):
     # inf_settings = api.task.send_request(state["sessionId"], "get_custom_inference_settings", data={})
     #
     # ui.set_model_info(api, task_id, model_meta, info, inf_settings)
+
 #
 #
 #

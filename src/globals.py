@@ -17,4 +17,5 @@ task_id = my_app.task_id
 model_meta: sly.ProjectMeta = None
 model_info = None
 tags_examples = None
-
+examples_data = None
+model_tag_names = None
