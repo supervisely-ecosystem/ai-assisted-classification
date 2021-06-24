@@ -43,7 +43,7 @@ def init(data, state):
 
     # settings
     state["topN"] = 5
-    state["applyTo"] = "image"
+    state["applyTo"] = "object"#"image" #@TODO: for debug
     state["assignMode"] = "append"
 
 

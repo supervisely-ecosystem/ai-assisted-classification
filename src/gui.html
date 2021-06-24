@@ -94,14 +94,14 @@
             <div class="app-header">
                 <!--                <div class="ml5"><b>ACTIONS:</b></div>-->
                 <div class="fflex">
-                    <el-button type="success" size="small" class="mt5 ml5 mb5"
+                    <el-button size="small" class="mt5 ml5 mb5"
                                :disabled="!state.selectedItem"
                                @click="command('assign_tag')">
                         <i class="zmdi zmdi-plus-circle mr5"></i>Assign Tag (alt+t)
                     </el-button>
-                    <el-button type="success" size="small" class="mt5 ml5 mb5"
-                               :disabled="!state.selectedItem"
-                               @click="command('assign_tag')">
+<!--                    :disabled="!state.selectedItem"-->
+                    <el-button size="small" class="mt5 ml5 mb5" v-if="state.applyTo === 'object'"
+                               @click="command('next_object')">
                         Next {{state.applyTo}} <i class="zmdi zmdi-arrow-right ml5"></i>
                     </el-button>
                 </div>

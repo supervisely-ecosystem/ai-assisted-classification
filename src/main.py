@@ -30,9 +30,20 @@ def connect(api: sly.Api, task_id, context, state, app_logger):
         raise e
 
 
-#
-#
-#
+@g.my_app.callback("next_object")
+@sly.timeit
+@g.my_app.ignore_errors_and_show_dialog_window()
+def next_object(api: sly.Api, task_id, context, state, app_logger):
+    pass
+
+
+@g.my_app.callback("manual_selected_image_changed")
+@sly.timeit
+@g.my_app.ignore_errors_and_show_dialog_window()
+def image_changed(api: sly.Api, task_id, context, state, app_logger):
+    pass
+
+
 # @g.my_app.callback("disconnect")
 # @sly.timeit
 # def disconnect(api: sly.Api, task_id, context, state, app_logger):
