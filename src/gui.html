@@ -15,7 +15,7 @@
             font-size: 11px;
             }
             #small_tabs .el-tabs__item {
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 500;
             height: 30px;
             line-height: 30px;
@@ -75,7 +75,7 @@
                     </sly-select-app-session>
                     <el-button class="ml5"
                                type="primary"
-                               size="mini"
+                               size="small"
                                :disabled="!state.sessionId"
                                @click="command('connect')"
                     >
@@ -91,7 +91,7 @@
              style="margin-left: 2px; margin-right: 2px;"
         >
             <div class="app-header">
-                <div class="ml5"><b>ACTIONS:</b></div>
+<!--                <div class="ml5"><b>ACTIONS:</b></div>-->
                 <el-button type="success" size="mini" class="mt5 ml5 mb5"
                            :disabled="!state.selectedItem"
                            @click="command('assign_tag')">

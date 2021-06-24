@@ -9,7 +9,7 @@ def init(data, state):
     data["ssOptions"] = {
         "sessionTags": ["deployed_nn_cls"],
         "showLabel": False,
-        "size": "mini"
+        "size": "small"
     }
     state["sessionId"] = 5857  # None @TODO: for debug
 
