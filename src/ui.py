@@ -13,6 +13,7 @@ def init(data, state):
 
     data["info"] = None
     data["tags"] = None
+    data["tagsExamples"] = None
     data["connected"] = False
     # data["connectionError"] = ""
     # data["rollbackIds"] = []

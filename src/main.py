@@ -15,11 +15,18 @@ import ui
 # ann_cache = defaultdict(list)  # only one (current) image in cache
 
 
-def set_model_info(task_id, api, info, meta):
+def set_model_info(task_id, api, info, tag_metas, tags_examples):
+    for tag_meta in tag_metas:
+        tag_meta: sly.TagMeta
+        if tag_meta.name not in tags_examples:
+            sly.logger.warning(f"There are no examples for tag \"{tag_meta.name}\"")
+            tags_examples[tag_meta.name] = []
+
     fields = [
         {"field": "data.connected", "payload": True},
         {"field": "data.info", "payload": info},
-        {"field": "data.tags", "payload": meta},
+        {"field": "data.tags", "payload": tag_metas.to_json()},
+        {"field": "data.tagsExamples", "payload": tags_examples}
     ]
     api.app.set_fields(task_id, fields)
     pass
@@ -29,15 +36,14 @@ def set_model_info(task_id, api, info, meta):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def connect(api: sly.Api, task_id, context, state, app_logger):
-    global model_meta, model_info
+    global model_meta, model_info, tag_examples
 
     model_info = api.task.send_request(state["sessionId"], "get_session_info", data={})
-    app_logger.debug("Session Info", extra={"info": model_info})
-
-    model_meta_json = api.task.send_request(state["sessionId"], "get_model_meta", data={})
-    model_meta = sly.ProjectMeta.from_json(model_meta_json)
-
-    set_model_info(task_id, api, model_info, model_meta.tag_metas.to_json())
+    model_meta = sly.ProjectMeta.from_json(
+        api.task.send_request(state["sessionId"], "get_model_meta", data={})
+    )
+    tags_examples = api.task.send_request(state["sessionId"], "get_tags_examples", data={})
+    set_model_info(task_id, api, model_info, model_meta.tag_metas, tags_examples)
 
     # meta_json = api.task.send_request(state["sessionId"], "get_output_classes_and_tags", data={})
     # model_meta = sly.ProjectMeta.from_json(meta_json)

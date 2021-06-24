@@ -113,9 +113,9 @@
                         <el-collapse class="xxx" v-model="state.activeNames" v-if="data.tags">
                             <el-collapse-item v-for="tag in data.tags" :name="tag.name">
                                 <template slot="title">
-                                    <span>{{tag.name}}</span>
+                                    <span><i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}</span>
                                 </template>
-                                <div>123 {{tag.name}}</div>
+                                <sly-image-slider v-if="data.info" :data="data.tagsExamples[tag.name]"/>
                             </el-collapse-item>
                         </el-collapse>
                     </div>
