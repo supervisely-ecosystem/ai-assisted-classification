@@ -19,3 +19,6 @@ model_info = None
 tags_examples = None
 examples_data = None
 model_tag_names = None
+
+cache_path = os.path.join(my_app.data_dir, "cache")
+sly.fs.mkdir(cache_path)
