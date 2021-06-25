@@ -124,6 +124,8 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
+
+#@TODO: unknown tag manually - show usage and explain in readme
 #@TODO: image mode
 #@TODO: Predictions will be shown here - add button refresh (select object or refresh???)
 #@TODO: iterate object - creation order - add to readme
