@@ -124,11 +124,9 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
-#@TODO: assign button
 #@TODO: image mode
 #@TODO: Predictions will be shown here - add button refresh (select object or refresh???)
 #@TODO: iterate object - creation order - add to readme
-#@TODO: continue cache.get_image_path
 #@TODO: get errors from serve
 #@TODO: connect loading ...
 if __name__ == "__main__":
