@@ -42,7 +42,7 @@ def next_object(api: sly.Api, task_id, context, state, app_logger):
     if next_figure_id is not None:
         api.img_ann_tool.set_figure(ann_tool_session, next_figure_id)
         api.img_ann_tool.zoom_to_figure(ann_tool_session, next_figure_id, zoom_factor=2)
-        results = figure_utils.classify(state["sessionId"], image_id, state["topn"], ann, next_figure_id)
+        results = figure_utils.classify(state["sessionId"], image_id, state["topn"], ann, next_figure_id, state["pad"])
         prediction.show(results)
     else:
         g.my_app.show_modal_window("All figures are visited. Select another figure or clear selection to iterate over objects again")
@@ -83,7 +83,7 @@ def figure_changed(api: sly.Api, task_id, context, state, app_logger):
     nn_session = state["sessionId"]
 
     ann = cache.get_annotation(project_id, image_id)
-    results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id)
+    results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
     prediction.show(results)
 
 

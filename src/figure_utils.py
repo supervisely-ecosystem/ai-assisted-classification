@@ -19,7 +19,7 @@ def get_next(ann: sly.Annotation, cur_figure_id):
                     return ann.labels[idx + 1].geometry.sly_id
 
 
-def classify(anntool_session_id, image_id, topn, ann: sly.Annotation, figure_id):
+def classify(anntool_session_id, image_id, topn, ann: sly.Annotation, figure_id, pad):
     if figure_id is None:
         raise RuntimeError("figure_id is None")
     label = ann.get_label_by_id(figure_id)
@@ -33,7 +33,8 @@ def classify(anntool_session_id, image_id, topn, ann: sly.Annotation, figure_id)
                                          data={
                                              "rectangle": bounds,
                                              "image_id": image_id,
-                                             "topn": topn
+                                             "topn": topn,
+                                             "pad": pad
                                          })
     return predictions
 
