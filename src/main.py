@@ -6,16 +6,27 @@ import prediction
 import ui
 
 
+def handle_model_errors(data):
+    if "error" in data:
+        raise RuntimeError(data["error"])
+    return data
+
+
 @g.my_app.callback("connect")
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def connect(api: sly.Api, task_id, context, state, app_logger):
     try:
-        g.model_info = api.task.send_request(state["sessionId"], "get_session_info", data={})
-        g.model_meta = sly.ProjectMeta.from_json(
+        g.model_info = handle_model_errors(
+            api.task.send_request(state["sessionId"], "get_session_info", data={})
+        )
+        model_meta_json = handle_model_errors(
             api.task.send_request(state["sessionId"], "get_model_meta", data={})
         )
-        g.tags_examples = api.task.send_request(state["sessionId"], "get_tags_examples", data={})
+        g.model_meta = sly.ProjectMeta.from_json(model_meta_json)
+        g.tags_examples = handle_model_errors(
+            api.task.send_request(state["sessionId"], "get_tags_examples", data={})
+        )
         ui.set_model_info(task_id, api, g.model_info, g.model_meta.tag_metas, g.tags_examples)
     except Exception as e:
         api.task.set_field(task_id, "state.connecting", False)
@@ -125,6 +136,7 @@ def main():
     g.my_app.run(data=data, state=state)
 
 
+#@TODO: readme - model respence - error
 #@TODO: unknown tag manually - show usage and explain in readme
 #@TODO: image mode
 #@TODO: Predictions will be shown here - add button refresh (select object or refresh???)
