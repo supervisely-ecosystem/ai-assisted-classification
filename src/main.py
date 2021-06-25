@@ -5,7 +5,7 @@ from collections import defaultdict
 import supervisely_lib as sly
 import globals as g
 import cache
-
+import figure_utils
 
 
 
@@ -39,8 +39,21 @@ def next_object(api: sly.Api, task_id, context, state, app_logger):
     sly.logger.debug("Context", extra={"context": context})
     project_id = context["projectId"]
     image_id = context["imageId"]
+    figure_id = context["figureId"]
+    ann_tool_session = context["sessionId"]
 
     ann = cache.get_annotation(project_id, image_id)
+
+    if len(ann.labels) == 0:
+        g.my_app.show_modal_window("There are no figures on image")
+        return
+
+    next_figure_id = figure_utils.get_next(ann, figure_id)
+    if next_figure_id is not None:
+        api.img_ann_tool.set_figure(ann_tool_session, next_figure_id)
+        api.img_ann_tool.zoom_to_figure(ann_tool_session, next_figure_id, zoom_factor=2)
+    else:
+        g.my_app.show_modal_window("All figures are visited. Select another figure or clear selection to iterate over objects again")
 
 
 
@@ -162,6 +175,8 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
+
+#@TODO: iterate object - creation order - add to readme
 #@TODO: continue cache.get_image_path
 #@TODO: get errors from serve
 #@TODO: connect loading ...
