@@ -86,21 +86,23 @@
              style="margin-left: 2px; margin-right: 2px;"
         >
             <div class="app-header">
-                <!--                <div class="ml5"><b>ACTIONS:</b></div>-->
-                <div class="fflex">
-                    <el-button size="small" class="mt5 ml5 mb5"
-                               :disabled="!state.selectedItem"
-                               @click="command('assign_tag')">
-                        <i class="zmdi zmdi-plus-circle mr5"></i>Assign Tag (alt+t)
-                    </el-button>
-                    <!--                    :disabled="!state.selectedItem"-->
-                    <el-button size="small" class="mt5 ml5 mb5" v-if="state.applyTo === 'object'"
-                               @click="command('next_object')">
-                        Next {{state.applyTo}} <i class="zmdi zmdi-arrow-right ml5"></i>
-                    </el-button>
+                <div class="fflex" style="justify-content: space-between">
+                    <div class="fflex">
+                        <el-button size="small" type="primary" class="mt5 ml5 mb5" v-if="state.applyTo === 'object'"
+                                   @click="command('next_object')">
+                            Next {{state.applyTo}} <i class="zmdi zmdi-arrow-right ml5"></i>
+                        </el-button>
+                    </div>
+                    <div>
+                        <el-button type="warning" size="small"
+                                   @click="command('disconnect')"
+                        >
+                            <i class="zmdi zmdi-close mr5"></i>Disconnect
+                        </el-button>
+                    </div>
                 </div>
             </div>
-
+            <hr style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
             <el-tabs id="small_tabs" v-model="state.tabName">
                 <el-tab-pane label="INFO" name="info">
                     <span slot="label"><i class="zmdi zmdi-info mr5"></i></i>INFO</span>

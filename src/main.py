@@ -87,22 +87,17 @@ def figure_changed(api: sly.Api, task_id, context, state, app_logger):
     prediction.show(results)
 
 
-
-
-# @g.my_app.callback("disconnect")
-# @sly.timeit
-# def disconnect(api: sly.Api, task_id, context, state, app_logger):
-#     global model_meta
-#     model_meta = None
-#
-#     new_data = {}
-#     new_state = {}
-#     ui.init(new_data, new_state)
-#     fields = [
-#         {"field": "data", "payload": new_data, "append": True},
-#         {"field": "state", "payload": new_state, "append": True},
-#     ]
-#     api.task.set_fields(task_id, fields)
+@g.my_app.callback("disconnect")
+@sly.timeit
+def disconnect(api: sly.Api, task_id, context, state, app_logger):
+    new_data = {}
+    new_state = {}
+    ui.init(new_data, new_state)
+    fields = [
+        {"field": "data", "payload": new_data, "append": True},
+        {"field": "state", "payload": new_state, "append": True},
+    ]
+    api.task.set_fields(task_id, fields)
 
 
 def main():
@@ -114,7 +109,6 @@ def main():
     g.my_app.run(data=data, state=state)
 
 
-#@TODO: disconnect
 #@TODO: Predictions will be shown here - add button refresh (select object or refresh???)
 #@TODO: iterate object - creation order - add to readme
 #@TODO: continue cache.get_image_path
