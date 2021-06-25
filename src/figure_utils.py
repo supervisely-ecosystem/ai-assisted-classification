@@ -1,5 +1,6 @@
 import supervisely_lib as sly
 import globals as g
+import cache
 
 
 def get_next(ann: sly.Annotation, cur_figure_id):
@@ -35,7 +36,15 @@ def classify(anntool_session_id, image_id, topn, ann: sly.Annotation, figure_id)
                                              "topn": topn
                                          })
     return predictions
-    #@TODO: add predictions to object
-    print(predictions)
-    #[{'pred_label': 7, 'pred_score': 0.036875125020742416, 'pred_class': '173074'}, {'pred_label': 81, 'pred_score': 0.03571882098913193, 'pred_class': '173064'}, {'pred_label': 72, 'pred_score': 0.028079558163881302, 'pred_class': '198938'}, {'pred_label': 74, 'pred_score': 0.02756684087216854, 'pred_class': '127409'}, {'pred_label': 29, 'pred_score': 0.026954438537359238, 'pred_class': '198660'}]
-    pass
+
+
+def assign_to_object(project_id, figure_id, class_name):
+    project_meta = cache.get_meta(project_id)
+    tag_meta: sly.TagMeta = project_meta.get_tag_meta(class_name)
+    if tag_meta is None:
+        tag_meta = g.model_meta.tag_metas.get(class_name).clone()
+        project_meta = project_meta.add_tag_meta(tag_meta)
+        cache.update_project_meta(project_id, project_meta)
+        project_meta = cache.get_meta(project_id)
+        tag_meta = project_meta.get_tag_meta(class_name)
+    g.api.advanced.add_tag_to_object(tag_meta.sly_id, figure_id)

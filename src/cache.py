@@ -51,3 +51,8 @@ def clear():
     project2meta.clear()
     #image2info.clear()
     image2ann.clear()
+
+
+def update_project_meta(project_id, project_meta: sly.ProjectMeta):
+    g.api.project.update_meta(project_id, project_meta.to_json())
+    get_meta(project_id, optimize=False)

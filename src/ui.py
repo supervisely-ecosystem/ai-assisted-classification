@@ -46,6 +46,8 @@ def init(data, state):
     state["assignMode"] = "append"
     state["topn"] = 5
     state["pad"] = 10
+    state["assignLoading"] = False
+    state["assignName"] = None
 
 
 def set_model_info(task_id, api, info, tag_metas, tags_examples):

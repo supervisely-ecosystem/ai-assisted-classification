@@ -100,6 +100,24 @@ def disconnect(api: sly.Api, task_id, context, state, app_logger):
     api.task.set_fields(task_id, fields)
 
 
+@g.my_app.callback("assign_to_object")
+@sly.timeit
+@g.my_app.ignore_errors_and_show_dialog_window()
+def assign_to_object(api: sly.Api, task_id, context, state, app_logger):
+    try:
+        project_id = context["projectId"]
+        figure_id = context["figureId"]
+        class_name = state["assignName"]
+        figure_utils.assign_to_object(project_id, figure_id, class_name)
+    except Exception as e:
+        fields = [
+            {"field": "state.assignLoading", "payload": False},
+        ]
+        api.task.set_fields(task_id, fields)
+        raise e
+    pass
+
+
 def main():
     data = {}
     state = {}
@@ -108,7 +126,8 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
-
+#@TODO: assign button
+#@TODO: image mode
 #@TODO: Predictions will be shown here - add button refresh (select object or refresh???)
 #@TODO: iterate object - creation order - add to readme
 #@TODO: continue cache.get_image_path
