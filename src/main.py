@@ -110,13 +110,10 @@ def assign_to_object(api: sly.Api, task_id, context, state, app_logger):
         figure_id = context["figureId"]
         class_name = state["assignName"]
         figure_utils.assign_to_object(project_id, figure_id, class_name)
+        api.task.set_field(g.task_id, "state.assignLoading", False)
     except Exception as e:
-        fields = [
-            {"field": "state.assignLoading", "payload": False},
-        ]
-        api.task.set_fields(task_id, fields)
+        api.task.set_field(g.task_id, "state.assignLoading", False)
         raise e
-    pass
 
 
 def main():
