@@ -18,15 +18,13 @@ import ui
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def connect(api: sly.Api, task_id, context, state, app_logger):
-    global model_meta, model_info, tag_examples
-
     try:
-        model_info = api.task.send_request(state["sessionId"], "get_session_info", data={})
-        model_meta = sly.ProjectMeta.from_json(
+        g.model_info = api.task.send_request(state["sessionId"], "get_session_info", data={})
+        g.model_meta = sly.ProjectMeta.from_json(
             api.task.send_request(state["sessionId"], "get_model_meta", data={})
         )
-        tags_examples = api.task.send_request(state["sessionId"], "get_tags_examples", data={})
-        ui.set_model_info(task_id, api, model_info, model_meta.tag_metas, tags_examples)
+        g.tags_examples = api.task.send_request(state["sessionId"], "get_tags_examples", data={})
+        ui.set_model_info(task_id, api, g.model_info, g.model_meta.tag_metas, g.tags_examples)
     except Exception as e:
         api.task.set_field(task_id, "state.connecting", False)
         raise e
@@ -184,7 +182,7 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
-
+#@TODO: Predictions will be shown here - add button refresh (select object or refresh???)
 #@TODO: iterate object - creation order - add to readme
 #@TODO: continue cache.get_image_path
 #@TODO: get errors from serve

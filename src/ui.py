@@ -19,7 +19,6 @@ def init(data, state):
     data["tags"] = None
     data["tagsExamples"] = None
     data["modelTagNames"] = None
-
     data["connected"] = False
     # data["connectionError"] = ""
     # data["rollbackIds"] = []
@@ -39,6 +38,7 @@ def init(data, state):
     state["processing"] = False
 
     state["activeNames"] = []
+    state["activeNamesPred"] = []
 
 
     # settings
