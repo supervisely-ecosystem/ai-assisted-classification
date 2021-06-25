@@ -42,9 +42,10 @@ def init(data, state):
 
 
     # settings
-    state["topN"] = 5
     state["applyTo"] = "object"#"image" #@TODO: for debug
     state["assignMode"] = "append"
+    state["topn"] = 5
+    state["pad"] = 10
 
 
 def set_model_info(task_id, api, info, tag_metas, tags_examples):

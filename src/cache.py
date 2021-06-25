@@ -45,3 +45,9 @@ def get_image_info(image_id):
     else:
         info = image2info[image_id]
     return info
+
+
+def clear():
+    project2meta.clear()
+    #image2info.clear()
+    image2ann.clear()

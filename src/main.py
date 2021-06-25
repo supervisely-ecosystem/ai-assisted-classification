@@ -6,7 +6,7 @@ import supervisely_lib as sly
 import globals as g
 import cache
 import figure_utils
-
+import prediction
 
 
 import ui
@@ -52,9 +52,18 @@ def next_object(api: sly.Api, task_id, context, state, app_logger):
     if next_figure_id is not None:
         api.img_ann_tool.set_figure(ann_tool_session, next_figure_id)
         api.img_ann_tool.zoom_to_figure(ann_tool_session, next_figure_id, zoom_factor=2)
+        results = figure_utils.classify(state["sessionId"], image_id, state["topn"], ann, next_figure_id)
+        prediction.show(results)
     else:
         g.my_app.show_modal_window("All figures are visited. Select another figure or clear selection to iterate over objects again")
+        prediction.hide()
 
+
+@g.my_app.callback("clear_cache")
+@sly.timeit
+@g.my_app.ignore_errors_and_show_dialog_window()
+def clear_cache(api: sly.Api, task_id, context, state, app_logger):
+    cache.clear()
 
 
 @g.my_app.callback("manual_selected_image_changed")

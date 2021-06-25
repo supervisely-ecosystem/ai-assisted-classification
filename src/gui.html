@@ -99,7 +99,7 @@
                                @click="command('assign_tag')">
                         <i class="zmdi zmdi-plus-circle mr5"></i>Assign Tag (alt+t)
                     </el-button>
-<!--                    :disabled="!state.selectedItem"-->
+                    <!--                    :disabled="!state.selectedItem"-->
                     <el-button size="small" class="mt5 ml5 mb5" v-if="state.applyTo === 'object'"
                                @click="command('next_object')">
                         Next {{state.applyTo}} <i class="zmdi zmdi-arrow-right ml5"></i>
@@ -168,7 +168,19 @@
                             </el-select>
                         </sly-field>
                         <sly-field title="Top N" description="Show only top N predictions">
-                            <el-input-number size="small" v-model="state.topN" :min="1"></el-input-number>
+                            <el-input-number size="small" v-model="state.topn" :min="1"></el-input-number>
+                        </sly-field>
+                        <sly-field title="Object padding"
+                                   description="Crop object with padding for prediction (applicable only when model is applied to objects)">
+                            <div class="fflex">
+                                <el-input-number size="small" v-model="state.pad" :min="0" :max="100"></el-input-number>
+                                <div class="ml5">percent</div>
+                            </div>
+                        </sly-field>
+                        <sly-field title="Cache"
+                                   description="App caches metadata, images and annotations. Clear cache if you get
+                                   special notifications from the app">
+                            <el-button size="small" @click="command('clear_cache')">Clear cache</el-button>
                         </sly-field>
                     </div>
                 </el-tab-pane>
