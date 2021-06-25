@@ -2,8 +2,10 @@ import os
 import pathlib
 import sys
 from collections import defaultdict
-import globals as g
 import supervisely_lib as sly
+import globals as g
+import cache
+
 
 
 
@@ -34,7 +36,12 @@ def connect(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def next_object(api: sly.Api, task_id, context, state, app_logger):
-    pass
+    sly.logger.debug("Context", extra={"context": context})
+    project_id = context["projectId"]
+    image_id = context["imageId"]
+
+    ann = cache.get_annotation(project_id, image_id)
+
 
 
 @g.my_app.callback("manual_selected_image_changed")
