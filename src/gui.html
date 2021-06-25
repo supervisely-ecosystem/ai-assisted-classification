@@ -110,7 +110,7 @@
                             <b style="color: #777777;">{{k}}</b>: {{v}}
                         </div>
 
-                        <div class="mt10"><b>MODEL CLASSES WITH EXAMPLES:</b></div>
+                        <div class="mt10"><b>ALL MODEL CLASSES WITH EXAMPLES:</b></div>
                         <div class="fflex" v-if="data.tags">
                             <el-button type="text" size="mini"
                                        :disabled="data.tags.length === state.activeNames.length"
@@ -139,7 +139,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="PREDICTIONS" name="predictions">
                     <span slot="label"><i class="zmdi zmdi-fire mr5"></i>PREDICTIONS</span>
-                    <div v-if="data.predTags">
+                    <div v-if="data.predTags" class="ml5">
                         <div class="mt10"><b>TOP {{state.topn}} PREDICTIONS:</b></div>
                         <div class="fflex" v-if="data.predTags">
                             <el-button type="text" size="mini"
@@ -158,16 +158,16 @@
                         <el-collapse class="xxx" v-model="state.activeNamesPred" v-if="data.predTags">
                             <el-collapse-item v-for="tag in data.predTags" :name="tag.name">
                                 <template slot="title">
-                                    <span>
+                                    <span style="min-width: 25%;">
                                         <i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}
                                     </span>
-                                    <b>{{tag.score}}</b>
+                                    <b class="ml10">p={{tag.score}}</b>
                                 </template>
                                 <sly-image-slider :data="data.tagsExamples[tag.name]"/>
                             </el-collapse-item>
                         </el-collapse>
                     </div>
-                    <div v-else>
+                    <div v-else class="ml5">
                         Predictions will be shown here
                     </div>
                 </el-tab-pane>

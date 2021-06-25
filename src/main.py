@@ -1,17 +1,9 @@
-import os
-import pathlib
-import sys
-from collections import defaultdict
 import supervisely_lib as sly
 import globals as g
 import cache
 import figure_utils
 import prediction
-
-
 import ui
-# from shared_utils.connect import get_model_info
-# from shared_utils.inference import postprocess
 
 
 @g.my_app.callback("connect")
@@ -68,7 +60,33 @@ def clear_cache(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def image_changed(api: sly.Api, task_id, context, state, app_logger):
-    pass
+    if state["applyTo"] == "object":
+        return
+
+
+@g.my_app.callback("manual_selected_figure_changed")
+@sly.timeit
+@g.my_app.ignore_errors_and_show_dialog_window()
+def figure_changed(api: sly.Api, task_id, context, state, app_logger):
+    sly.logger.debug("Context", extra={"context": context})
+    if state["applyTo"] == "image":
+        return
+
+    figure_id = context.get("figureId", None)
+    if figure_id is None:
+        sly.logger.debug("Selected figure is None")
+        return
+
+    project_id = context["projectId"]
+    image_id = context["imageId"]
+    figure_id = context["figureId"]
+    nn_session = state["sessionId"]
+
+    ann = cache.get_annotation(project_id, image_id)
+    results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id)
+    prediction.show(results)
+
+
 
 
 # @g.my_app.callback("disconnect")
@@ -85,93 +103,6 @@ def image_changed(api: sly.Api, task_id, context, state, app_logger):
 #         {"field": "state", "payload": new_state, "append": True},
 #     ]
 #     api.task.set_fields(task_id, fields)
-#
-#
-# @g.my_app.callback("select_all_classes")
-# @sly.timeit
-# def select_all_classes(api: sly.Api, task_id, context, state, app_logger):
-#     api.task.set_field(task_id, "state.classes", [True] * len(model_meta.obj_classes))
-#
-#
-# @g.my_app.callback("deselect_all_classes")
-# @sly.timeit
-# def deselect_all_classes(api: sly.Api, task_id, context, state, app_logger):
-#     api.task.set_field(task_id, "state.classes", [False] * len(model_meta.obj_classes))
-#
-#
-# @g.my_app.callback("select_all_tags")
-# @sly.timeit
-# def select_all_tags(api: sly.Api, task_id, context, state, app_logger):
-#     api.task.set_field(task_id, "state.tags", [True] * len(model_meta.tag_metas))
-#
-#
-# @g.my_app.callback("deselect_all_tags")
-# @sly.timeit
-# def deselect_all_tags(api: sly.Api, task_id, context, state, app_logger):
-#     api.task.set_field(task_id, "state.tags", [False] * len(model_meta.tag_metas))
-#
-#
-# @g.my_app.callback("inference")
-# @sly.timeit
-# def inference(api: sly.Api, task_id, context, state, app_logger):
-#     project_id = context["projectId"]
-#     image_id = context["imageId"]
-#
-#     try:
-#         inference_setting = yaml.safe_load(state["settings"])
-#     except Exception as e:
-#         inference_setting = {}
-#         app_logger.warn(repr(e))
-#
-#     project_meta = sly.ProjectMeta.from_json(api.project.get_meta(project_id))
-#
-#     if image_id not in ann_cache:
-#         # keep only current image for simplicity
-#         ann_cache.clear()
-#
-#     ann_json = api.annotation.download(image_id).annotation
-#     ann = sly.Annotation.from_json(ann_json, project_meta)
-#     ann_cache[image_id].append(ann)
-#
-#     ann_pred_json = api.task.send_request(state["sessionId"],
-#                                           "inference_image_id",
-#                                           data={
-#                                               "image_id": image_id,
-#                                               "settings": inference_setting
-#                                           })
-#     ann_pred = sly.Annotation.from_json(ann_pred_json, model_meta)
-#     res_ann, res_project_meta = None, None #postprocess(api, project_id, ann_pred, project_meta, model_meta, state)
-#
-#     if state["addMode"] == "merge":
-#         res_ann = ann.merge(res_ann)
-#     else:
-#         pass  # replace (data prepared, nothing to do)
-#
-#     if res_project_meta != project_meta:
-#         api.project.update_meta(project_id, res_project_meta.to_json())
-#     api.annotation.upload_ann(image_id, res_ann)
-#     fields = [
-#         {"field": "data.rollbackIds", "payload": list(ann_cache.keys())},
-#         {"field": "state.processing", "payload": False}
-#     ]
-#     api.task.set_fields(task_id, fields)
-#
-#
-# @g.my_app.callback("undo")
-# @sly.timeit
-# def undo(api: sly.Api, task_id, context, state, app_logger):
-#     image_id = context["imageId"]
-#     if image_id in ann_cache:
-#         ann = ann_cache[image_id].pop()
-#         if len(ann_cache[image_id]) == 0:
-#             del ann_cache[image_id]
-#         api.annotation.upload_ann(image_id, ann)
-#
-#     fields = [
-#         {"field": "data.rollbackIds", "payload": list(ann_cache.keys())},
-#         {"field": "state.processing", "payload": False}
-#     ]
-#     api.task.set_fields(task_id, fields)
 
 
 def main():
@@ -182,6 +113,8 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
+
+#@TODO: disconnect
 #@TODO: Predictions will be shown here - add button refresh (select object or refresh???)
 #@TODO: iterate object - creation order - add to readme
 #@TODO: continue cache.get_image_path
