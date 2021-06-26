@@ -4,6 +4,7 @@ import supervisely_lib as sly
 import globals as g
 import info_tab
 import predictions_tab
+import settings_tab
 
 
 def init(data, state):
@@ -22,12 +23,8 @@ def init(data, state):
 
     info_tab.init(data, state)
     predictions_tab.init(data, state)
+    settings_tab.init(data, state)
 
-    # settings
-    state["applyTo"] = "object"#"image" #@TODO: for debug
-    state["assignMode"] = "append"
-    state["topn"] = 5
-    state["pad"] = 10
     state["assignLoading"] = False
     state["assignName"] = None
 

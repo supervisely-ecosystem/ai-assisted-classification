@@ -60,13 +60,6 @@ def next_object(api: sly.Api, task_id, context, state, app_logger):
         prediction.hide()
 
 
-@g.my_app.callback("clear_cache")
-@sly.timeit
-@g.my_app.ignore_errors_and_show_dialog_window()
-def clear_cache(api: sly.Api, task_id, context, state, app_logger):
-    cache.clear()
-
-
 @g.my_app.callback("manual_selected_image_changed")
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
