@@ -189,12 +189,10 @@ def main():
 
 
 #@TODO: readme - add predict again example gif
-#@TODO: readme - model respence - error
+#@TODO: readme - model response - error
 #@TODO: unknown tag manually - show usage and explain in readme
 #@TODO: image mode
-#@TODO: Predictions will be shown here - add button refresh (select object or refresh???)
 #@TODO: iterate object - creation order - add to readme
 #@TODO: get errors from serve
-#@TODO: connect loading ...
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
