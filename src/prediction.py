@@ -23,4 +23,4 @@ def show(results):
 
 
 def hide():
-    g.api.task.set_field(g.task_id, "data.predictions", None)
+    g.api.task.set_field(g.task_id, "data.predTags", None)

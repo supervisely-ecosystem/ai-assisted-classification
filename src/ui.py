@@ -13,33 +13,26 @@ def init(data, state):
         "showLabel": False,
         "size": "small"
     }
-    state["sessionId"] = 5857  # None @TODO: for debug
 
     data["info"] = None
     data["tags"] = None
     data["tagsExamples"] = None
     data["modelTagNames"] = None
     data["connected"] = False
-    # data["connectionError"] = ""
-    # data["rollbackIds"] = []
-    # data["ssOptions"] = {
-    #     "sessionTags": ["deployed_nn"],
-    #     "showLabel": False,
-    #     "size": "mini"
-    # }
 
-    state["sessionId"] = ""
+    state["nnId"] = ""  # task id of deployed model
     state["classes"] = []
     state["tags"] = []
     state["tabName"] = "info"
-    state["suffix"] = "model"
-    state["settings"] = "# empty"
-    state["addMode"] = "merge"
-    state["processing"] = False
+    #state["suffix"] = "model"
+    #state["settings"] = "# empty"
+    #state["addMode"] = "merge"
+    #state["processing"] = False
 
     state["activeNames"] = []
     state["activeNamesPred"] = []
-
+    data["predTags"] = None
+    data["predTagsNames"] = None
 
     # settings
     state["applyTo"] = "object"#"image" #@TODO: for debug
@@ -48,6 +41,8 @@ def init(data, state):
     state["pad"] = 10
     state["assignLoading"] = False
     state["assignName"] = None
+
+    state["predictLoading"] = False
 
 
 def set_model_info(task_id, api, info, tag_metas, tags_examples):

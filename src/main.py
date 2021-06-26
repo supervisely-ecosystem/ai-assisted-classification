@@ -18,14 +18,14 @@ def handle_model_errors(data):
 def connect(api: sly.Api, task_id, context, state, app_logger):
     try:
         g.model_info = handle_model_errors(
-            api.task.send_request(state["sessionId"], "get_session_info", data={})
+            api.task.send_request(state["nnId"], "get_session_info", data={})
         )
         model_meta_json = handle_model_errors(
-            api.task.send_request(state["sessionId"], "get_model_meta", data={})
+            api.task.send_request(state["nnId"], "get_model_meta", data={})
         )
         g.model_meta = sly.ProjectMeta.from_json(model_meta_json)
         g.tags_examples = handle_model_errors(
-            api.task.send_request(state["sessionId"], "get_tags_examples", data={})
+            api.task.send_request(state["nnId"], "get_tags_examples", data={})
         )
         ui.set_model_info(task_id, api, g.model_info, g.model_meta.tag_metas, g.tags_examples)
     except Exception as e:
@@ -53,7 +53,7 @@ def next_object(api: sly.Api, task_id, context, state, app_logger):
     if next_figure_id is not None:
         api.img_ann_tool.set_figure(ann_tool_session, next_figure_id)
         api.img_ann_tool.zoom_to_figure(ann_tool_session, next_figure_id, zoom_factor=2)
-        results = figure_utils.classify(state["sessionId"], image_id, state["topn"], ann, next_figure_id, state["pad"])
+        results = figure_utils.classify(state["nnId"], image_id, state["topn"], ann, next_figure_id, state["pad"])
         prediction.show(results)
     else:
         g.my_app.show_modal_window("All figures are visited. Select another figure or clear selection to iterate over objects again")
@@ -86,12 +86,13 @@ def figure_changed(api: sly.Api, task_id, context, state, app_logger):
     figure_id = context.get("figureId", None)
     if figure_id is None:
         sly.logger.debug("Selected figure is None")
+        prediction.hide()
         return
 
     project_id = context["projectId"]
     image_id = context["imageId"]
     figure_id = context["figureId"]
-    nn_session = state["sessionId"]
+    nn_session = state["nnId"]
 
     ann = cache.get_annotation(project_id, image_id)
     results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
@@ -124,6 +125,31 @@ def assign_to_object(api: sly.Api, task_id, context, state, app_logger):
         api.task.set_field(g.task_id, "state.assignLoading", False)
     except Exception as e:
         api.task.set_field(g.task_id, "state.assignLoading", False)
+        raise e
+
+
+@g.my_app.callback("predict")
+@sly.timeit
+@g.my_app.ignore_errors_and_show_dialog_window()
+def predict(api: sly.Api, task_id, context, state, app_logger):
+    try:
+        project_id = context["projectId"]
+        image_id = context["imageId"]
+        figure_id = context["figureId"]
+        apply_to = state["applyTo"]
+        nn_session = state["nnId"]
+
+        if apply_to == "object":
+            ann = cache.get_annotation(project_id, image_id)
+            results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
+            prediction.show(results)
+        elif apply_to == "image":
+            raise NotImplementedError()
+
+        api.task.set_field(g.task_id, "state.predictLoading", False)
+    except Exception as e:
+        api.task.set_field(g.task_id, "state.predictLoading", False)
+        prediction.hide()
         raise e
 
 
