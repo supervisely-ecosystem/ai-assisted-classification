@@ -1,7 +1,9 @@
-import globals as g
 from collections import defaultdict
-import info_tab
 import supervisely_lib as sly
+
+import globals as g
+import info_tab
+import predictions_tab
 
 
 def init(data, state):
@@ -19,11 +21,7 @@ def init(data, state):
     state["tabName"] = "info"
 
     info_tab.init(data, state)
-
-    state["activeNames"] = []
-    state["activeNamesPred"] = []
-    data["predTags"] = None
-    data["predTagsNames"] = None
+    predictions_tab.init(data, state)
 
     # settings
     state["applyTo"] = "object"#"image" #@TODO: for debug
