@@ -22,3 +22,5 @@ model_tag_names = None
 
 cache_path = os.path.join(my_app.data_dir, "cache")
 sly.fs.mkdir(cache_path)
+
+unknown_tag_meta = sly.TagMeta("unknown", sly.TagValueType.NONE, color=[255,165,0])

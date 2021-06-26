@@ -159,6 +159,26 @@ def predict(api: sly.Api, task_id, context, state, app_logger):
         raise e
 
 
+@g.my_app.callback("mark_unknown")
+@sly.timeit
+@g.my_app.ignore_errors_and_show_dialog_window()
+def mark_unknown(api: sly.Api, task_id, context, state, app_logger):
+    try:
+        project_id = context["projectId"]
+        image_id = context["imageId"]
+        figure_id = context["figureId"]
+        apply_to = state["applyTo"]
+
+        if apply_to == "object":
+            figure_utils._assign_tag_to_object(project_id, figure_id, g.unknown_tag_meta)
+        else:
+            raise NotImplementedError()
+        api.task.set_field(g.task_id, "state.assignLoading", False)
+    except Exception as e:
+        api.task.set_field(g.task_id, "state.assignLoading", False)
+        raise e
+
+
 def main():
     data = {}
     state = {}

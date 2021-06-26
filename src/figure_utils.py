@@ -40,12 +40,16 @@ def classify(nn_id, image_id, topn, ann: sly.Annotation, figure_id, pad):
 
 
 def assign_to_object(project_id, figure_id, class_name):
+    tag_meta = g.model_meta.tag_metas.get(class_name)
+    _assign_tag_to_object(project_id, figure_id, tag_meta)
+
+
+def _assign_tag_to_object(project_id, figure_id, tag_meta):
     project_meta = cache.get_meta(project_id)
-    tag_meta: sly.TagMeta = project_meta.get_tag_meta(class_name)
-    if tag_meta is None:
-        tag_meta = g.model_meta.tag_metas.get(class_name).clone()
+    project_tag_meta: sly.TagMeta = project_meta.get_tag_meta(tag_meta.name)
+    if project_tag_meta is None:
         project_meta = project_meta.add_tag_meta(tag_meta)
         cache.update_project_meta(project_id, project_meta)
         project_meta = cache.get_meta(project_id)
-        tag_meta = project_meta.get_tag_meta(class_name)
-    g.api.advanced.add_tag_to_object(tag_meta.sly_id, figure_id)
+        project_tag_meta = project_meta.get_tag_meta(tag_meta.name)
+    g.api.advanced.add_tag_to_object(project_tag_meta.sly_id, figure_id)
