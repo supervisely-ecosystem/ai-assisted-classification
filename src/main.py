@@ -4,6 +4,7 @@ import cache
 import figure_utils
 import prediction
 import ui
+import info_tab
 
 
 def handle_model_errors(data):
@@ -27,7 +28,7 @@ def connect(api: sly.Api, task_id, context, state, app_logger):
         g.tags_examples = handle_model_errors(
             api.task.send_request(state["nnId"], "get_tags_examples", data={})
         )
-        ui.set_model_info(task_id, api, g.model_info, g.model_meta.tag_metas, g.tags_examples)
+        info_tab.set_model_info(task_id, api, g.model_info, g.model_meta.tag_metas, g.tags_examples)
     except Exception as e:
         api.task.set_field(task_id, "state.connecting", False)
         raise e
