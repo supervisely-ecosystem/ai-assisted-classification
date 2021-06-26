@@ -134,6 +134,16 @@
                                         <i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}
                                     </span>
                                 </template>
+                                <el-button v-if="state.applyTo === 'object'"
+                                           size="small" type="primary" class="mt5 ml5 mb5"
+                                           @click="state.assignLoading = true;
+                                                   state.assignName = tag.name;
+                                                   command('assign_to_object');"
+                                           :loading="state.assignLoading"
+                                           :disabled="!context.figureId"
+                                >
+                                    Assign tag "{{tag.name}}" to selected object
+                                </el-button>
                                 <sly-image-slider :data="data.tagsExamples[tag.name]"/>
                             </el-collapse-item>
                         </el-collapse>
