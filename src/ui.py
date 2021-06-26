@@ -20,7 +20,7 @@ def init(data, state):
     data["modelTagNames"] = None
     data["connected"] = False
 
-    state["nnId"] = ""  # task id of deployed model
+    state["nnId"] = None  # task id of deployed model
     state["classes"] = []
     state["tags"] = []
     state["tabName"] = "info"

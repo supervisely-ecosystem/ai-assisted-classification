@@ -71,6 +71,9 @@ def clear_cache(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def image_changed(api: sly.Api, task_id, context, state, app_logger):
+    nn_session = state["nnId"]
+    if nn_session is None:
+        return
     if state["applyTo"] == "object":
         return
 
@@ -79,6 +82,10 @@ def image_changed(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def figure_changed(api: sly.Api, task_id, context, state, app_logger):
+    nn_session = state["nnId"]
+    if nn_session is None:
+        return
+
     sly.logger.debug("Context", extra={"context": context})
     if state["applyTo"] == "image":
         return
@@ -92,7 +99,6 @@ def figure_changed(api: sly.Api, task_id, context, state, app_logger):
     project_id = context["projectId"]
     image_id = context["imageId"]
     figure_id = context["figureId"]
-    nn_session = state["nnId"]
 
     ann = cache.get_annotation(project_id, image_id)
     results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
@@ -162,6 +168,7 @@ def main():
     g.my_app.run(data=data, state=state)
 
 
+#@TODO: readme - add predict again example gif
 #@TODO: readme - model respence - error
 #@TODO: unknown tag manually - show usage and explain in readme
 #@TODO: image mode

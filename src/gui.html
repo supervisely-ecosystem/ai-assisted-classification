@@ -195,6 +195,19 @@
                                 <sly-image-slider :data="data.tagsExamples[tag.name]"/>
                             </el-collapse-item>
                         </el-collapse>
+                        <sly-field class="mt15"
+                                   :title="`Correct class not found among top ${state.topn} predictions?`"
+                                   :description="`If you compared ${state.applyTo} with all predictions and
+                                   the correct class not found, you can mark this ${state.applyTo} with tag 'Unknown' and
+                                   get back to this case later`">
+                            <el-button size="small" class="mt5 ml5 mb5"
+                                       :plain="true" type="warning"
+                               :disabled="(!context.figureId && state.applyTo === 'object')"
+                               @click="command('mark_unknown');"
+                            >
+                                Assign tag <span style="color: orange"><i class="zmdi zmdi-label"></i> "Unknown"</span> to current {{state.applyTo}}
+                            </el-button>
+                        </sly-field>
                     </div>
                     <div v-else class="ml5">
                         Predictions will be shown here. Select {{state.applyTo}} or press "Refresh" button
