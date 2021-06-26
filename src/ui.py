@@ -1,5 +1,6 @@
 import globals as g
 from collections import defaultdict
+import info_tab
 import supervisely_lib as sly
 
 
@@ -13,21 +14,11 @@ def init(data, state):
         "showLabel": False,
         "size": "small"
     }
-
-    data["info"] = None
-    data["tags"] = None
-    data["tagsExamples"] = None
-    data["modelTagNames"] = None
     data["connected"] = False
-
     state["nnId"] = None  # task id of deployed model
-    state["classes"] = []
-    state["tags"] = []
     state["tabName"] = "info"
-    #state["suffix"] = "model"
-    #state["settings"] = "# empty"
-    #state["addMode"] = "merge"
-    #state["processing"] = False
+
+    info_tab.init(data, state)
 
     state["activeNames"] = []
     state["activeNamesPred"] = []

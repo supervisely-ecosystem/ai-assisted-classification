@@ -180,9 +180,10 @@ def mark_unknown(api: sly.Api, task_id, context, state, app_logger):
 
 
 def main():
+    g.my_app.compile_template(g.root_source_dir)
+
     data = {}
     state = {}
-
     ui.init(data, state)
 
     g.my_app.run(data=data, state=state)
