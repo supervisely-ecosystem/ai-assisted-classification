@@ -1,11 +1,4 @@
 <div>
-    <el-button size="small" class="mt5 ml5 mb5"
-               :loading="state.predictLoading"
-               :disabled="(!context.figureId && state.applyTo === 'object')"
-               @click="state.predictLoading = true; command('predict');"
-    >
-        Refresh predictions for selected {{state.applyTo}}
-    </el-button>
     <div v-if="data.predTags" class="ml5">
         <div class="mt10"><b>TOP {{state.topn}} PREDICTIONS:</b></div>
         <div class="fflex" v-if="data.predTags">
@@ -60,6 +53,13 @@
         </sly-field>
     </div>
     <div v-else class="ml5">
+<!--        <el-button size="small" class="mt5 ml5 mb5"-->
+<!--                   :loading="state.predictLoading"-->
+<!--                   :disabled="(!context.figureId && state.applyTo === 'object')"-->
+<!--                   @click="state.predictLoading = true; command('predict');"-->
+<!--        >-->
+<!--            Refresh predictions for selected {{state.applyTo}}-->
+<!--        </el-button>-->
         Predictions will be shown here. Select {{state.applyTo}} or press "Refresh" button
     </div>
 </div>
