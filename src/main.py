@@ -19,6 +19,9 @@ def handle_model_errors(data):
 @g.my_app.ignore_errors_and_show_dialog_window()
 def connect(api: sly.Api, task_id, context, state, app_logger):
     try:
+        fields = {
+            "state.loading": False
+        }
         g.model_info = handle_model_errors(
             api.task.send_request(state["nnId"], "get_session_info", data={})
         )
@@ -29,10 +32,10 @@ def connect(api: sly.Api, task_id, context, state, app_logger):
         g.tags_examples = handle_model_errors(
             api.task.send_request(state["nnId"], "get_tags_examples", data={})
         )
-        info_tab.set_model_info(task_id, api, g.model_info, g.model_meta.tag_metas, g.tags_examples)
-        api.task.set_field(task_id, "state.loading", False)
+        info_tab.set_model_info(task_id, api, g.model_info, g.model_meta.tag_metas, g.tags_examples, fields)
+        api.task.set_fields_from_dict(task_id, fields)
     except Exception as e:
-        api.task.set_field(task_id, "state.loading", False)
+        api.task.set_fields_from_dict(task_id, fields)
         raise e
 
 

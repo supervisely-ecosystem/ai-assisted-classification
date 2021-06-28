@@ -9,7 +9,7 @@ def init(data, state):
     data["modelTagNames"] = None
 
 
-def set_model_info(task_id, api, info, tag_metas, tags_examples):
+def set_model_info(task_id, api, info, tag_metas, tags_examples, fields_dict):
     g.model_tag_names = []
     for tag_meta in tag_metas:
         tag_meta: sly.TagMeta
@@ -22,11 +22,10 @@ def set_model_info(task_id, api, info, tag_metas, tags_examples):
     for name, urls in tags_examples.items():
         g.examples_data[name] = [{"moreExamples": [url], "preview": url} for url in urls]
 
-    fields = [
-        {"field": "data.connected", "payload": True},
-        {"field": "data.info", "payload": info},
-        {"field": "data.tags", "payload": tag_metas.to_json()},
-        {"field": "data.tagsExamples", "payload": g.examples_data},
-        {"field": "data.modelTagNames", "payload": g.model_tag_names}
-    ]
-    api.app.set_fields(task_id, fields)
+    fields_dict.update({
+        "data.connected": True,
+        "data.info": info,
+        "data.tags": tag_metas.to_json(),
+        "data.tagsExamples": g.examples_data,
+        "data.modelTagNames": g.model_tag_names
+    })
