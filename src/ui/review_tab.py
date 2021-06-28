@@ -9,22 +9,21 @@ def init(data, state):
     data["reviewTagsNames"] = None
 
 
-def set_data(tags, tags_names, active_names):
-    fields = [
-        {"field": "state.activeNamesReview", "payload": list(set(active_names))},
-        {"field": "data.reviewTags", "payload": tags},
-        {"field": "data.reviewTagsNames", "payload": list(set(tags_names)) if tags_names is not None else tags_names},
-    ]
-    g.api.task.set_fields(g.task_id, fields)
+def set_data(tags, tags_names, active_names, fields):
+    fields.update({
+        "state.activeNamesReview": list(set(active_names)),
+        "data.reviewTags": tags,
+        "data.reviewTagsNames": list(set(tags_names)) if tags_names is not None else tags_names,
+    })
 
 
-def reset():
-    set_data(tags=None, tags_names=None, active_names=[])
+def reset(fields):
+    set_data(tags=None, tags_names=None, active_names=[], fields=fields)
 
 
-def refresh_figure(project_id, figure_id):
+def refresh_figure(project_id, figure_id, fields):
     if figure_id is None:
-        reset()
+        reset(fields)
     else:
         object_tags_json = g.api.advanced.get_object_tags(figure_id)
         project_meta = cache.get_meta(project_id)
@@ -39,4 +38,4 @@ def refresh_figure(project_id, figure_id):
             if tag_meta is not None:
                 review_tags.append({**tag_meta.to_json(), "labelerLogin": tag.labeler_login})
                 reviewTagsNames.append(tag_meta.name)
-        set_data(review_tags, reviewTagsNames, activeNamesReview)
+        set_data(review_tags, reviewTagsNames, activeNamesReview, fields)

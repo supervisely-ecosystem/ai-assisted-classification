@@ -44,6 +44,9 @@ def connect(api: sly.Api, task_id, context, state, app_logger):
 @g.my_app.ignore_errors_and_show_dialog_window()
 def next_object(api: sly.Api, task_id, context, state, app_logger):
     try:
+        fields = {
+            "state.loading": False
+        }
         sly.logger.debug("Context", extra={"context": context})
         project_id = context["projectId"]
         image_id = context["imageId"]
@@ -52,22 +55,21 @@ def next_object(api: sly.Api, task_id, context, state, app_logger):
         ann = cache.get_annotation(project_id, image_id)
         if len(ann.labels) == 0:
             g.my_app.show_modal_window("There are no figures on image")
-            g.api.task.set_field(g.task_id, "state.loading", False)
-            return
-        next_figure_id = figure_utils.get_next(ann, figure_id)
-        if next_figure_id is not None:
-            api.img_ann_tool.set_figure(ann_tool_session, next_figure_id)
-            api.img_ann_tool.zoom_to_figure(ann_tool_session, next_figure_id, zoom_factor=2)
-            results = figure_utils.classify(state["nnId"], image_id, state["topn"], ann, next_figure_id, state["pad"])
-            prediction.show(results)
-            review_tab.refresh_figure(project_id, next_figure_id)
         else:
-            g.my_app.show_modal_window("All figures are visited. Select another figure or clear selection to iterate over objects again")
-            prediction.hide()
-            review_tab.reset()
-        g.api.task.set_field(g.task_id, "state.loading", False)
+            next_figure_id = figure_utils.get_next(ann, figure_id)
+            if next_figure_id is not None:
+                api.img_ann_tool.set_figure(ann_tool_session, next_figure_id)
+                api.img_ann_tool.zoom_to_figure(ann_tool_session, next_figure_id, zoom_factor=2)
+                results = figure_utils.classify(state["nnId"], image_id, state["topn"], ann, next_figure_id, state["pad"])
+                prediction.show(results, fields)
+                review_tab.refresh_figure(project_id, next_figure_id, fields)
+            else:
+                g.my_app.show_modal_window("All figures are visited. Select another figure or clear selection to iterate over objects again")
+                prediction.hide(fields)
+                review_tab.reset(fields)
+        api.task.set_fields_from_dict(task_id, fields)
     except Exception as e:
-        api.task.set_field(task_id, "state.loading", False)
+        api.task.set_fields_from_dict(task_id, fields)
         raise e
 
 
@@ -86,24 +88,28 @@ def image_changed(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def figure_changed(api: sly.Api, task_id, context, state, app_logger):
+    fields = {
+        "state.loading": False
+    }
     try:
+
         project_id = context["projectId"]
         nn_session = state["nnId"]
         if nn_session is None:
-            api.task.set_field(task_id, "state.loading", False)
+            api.task.set_fields_from_dict(task_id, fields)
             return
 
         sly.logger.debug("Context", extra={"context": context})
         if state["applyTo"] == "image":
-            api.task.set_field(task_id, "state.loading", False)
+            api.task.set_fields_from_dict(task_id, fields)
             return
 
         figure_id = context.get("figureId", None)
         if figure_id is None:
             sly.logger.debug("Selected figure is None")
-            prediction.hide()
-            review_tab.reset()
-            api.task.set_field(task_id, "state.loading", False)
+            prediction.hide(fields)
+            review_tab.reset(fields)
+            api.task.set_fields_from_dict(task_id, fields)
             return
 
         project_id = context["projectId"]
@@ -112,11 +118,11 @@ def figure_changed(api: sly.Api, task_id, context, state, app_logger):
 
         ann = cache.get_annotation(project_id, image_id)
         results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
-        prediction.show(results)
-        review_tab.refresh_figure(project_id, figure_id)
-        api.task.set_field(task_id, "state.loading", False)
+        prediction.show(results, fields)
+        review_tab.refresh_figure(project_id, figure_id, fields)
+        api.task.set_fields_from_dict(task_id, fields)
     except Exception as e:
-        api.task.set_field(task_id, "state.loading", False)
+        api.task.set_fields_from_dict(task_id, fields)
         raise e
 
 
@@ -132,111 +138,6 @@ def disconnect(api: sly.Api, task_id, context, state, app_logger):
         {"field": "state", "payload": new_state},
     ]
     api.task.set_fields(task_id, fields)
-
-
-@g.my_app.callback("assign_to_object")
-@sly.timeit
-@g.my_app.ignore_errors_and_show_dialog_window()
-def assign_to_object(api: sly.Api, task_id, context, state, app_logger):
-    try:
-        project_id = context["projectId"]
-        figure_id = context["figureId"]
-        class_name = state["assignName"]
-        figure_utils.assign_to_object(project_id, figure_id, class_name)
-        review_tab.refresh_figure(project_id, figure_id)
-        fields = [
-            {"field": "state.loading", "payload": False},
-            {"field": "state.previousName", "payload": class_name},
-        ]
-        api.task.set_fields(task_id, fields)
-    except Exception as e:
-        fields = [
-            {"field": "state.loading", "payload": False},
-        ]
-        api.task.set_fields(task_id, fields)
-        raise e
-
-
-@g.my_app.callback("predict")
-@sly.timeit
-@g.my_app.ignore_errors_and_show_dialog_window()
-def predict(api: sly.Api, task_id, context, state, app_logger):
-    try:
-        project_id = context["projectId"]
-        image_id = context["imageId"]
-        figure_id = context["figureId"]
-        apply_to = state["applyTo"]
-        nn_session = state["nnId"]
-
-        if apply_to == "object":
-            ann = cache.get_annotation(project_id, image_id)
-            results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
-            prediction.show(results)
-            review_tab.refresh_figure(project_id, figure_id)
-        elif apply_to == "image":
-            raise NotImplementedError()
-
-        api.task.set_field(g.task_id, "state.loading", False)
-    except Exception as e:
-        api.task.set_field(g.task_id, "state.loading", False)
-        prediction.hide()
-        raise e
-
-
-@g.my_app.callback("mark_unknown")
-@sly.timeit
-@g.my_app.ignore_errors_and_show_dialog_window()
-def mark_unknown(api: sly.Api, task_id, context, state, app_logger):
-    try:
-        project_id = context["projectId"]
-        image_id = context["imageId"]
-        figure_id = context["figureId"]
-        apply_to = state["applyTo"]
-
-        if apply_to == "object":
-            figure_utils._assign_tag_to_object(project_id, figure_id, g.unknown_tag_meta)
-            review_tab.refresh_figure(project_id, figure_id)
-        else:
-            raise NotImplementedError()
-
-        fields = [
-            {"field": "state.loading", "payload": False},
-            {"field": "state.previousName", "payload": g.unknown_tag_meta.name},
-        ]
-        api.task.set_fields(task_id, fields)
-    except Exception as e:
-        fields = [
-            {"field": "state.loading", "payload": False},
-        ]
-        api.task.set_fields(task_id, fields)
-        raise e
-
-
-@g.my_app.callback("mark_as_previous")
-@sly.timeit
-@g.my_app.ignore_errors_and_show_dialog_window()
-def mark_as_previous(api: sly.Api, task_id, context, state, app_logger):
-    try:
-        project_id = context["projectId"]
-        image_id = context["imageId"]
-        figure_id = context["figureId"]
-        apply_to = state["applyTo"]
-
-        if apply_to == "object":
-            figure_utils.assign_to_object(project_id, figure_id, state["previousName"])
-            review_tab.refresh_figure(project_id, figure_id)
-        else:
-            raise NotImplementedError()
-        fields = [
-            {"field": "state.loading", "payload": False},
-        ]
-        api.task.set_fields(task_id, fields)
-    except Exception as e:
-        fields = [
-            {"field": "state.loading", "payload": False},
-        ]
-        api.task.set_fields(task_id, fields)
-        raise e
 
 
 def main():

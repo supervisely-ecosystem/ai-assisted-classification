@@ -2,7 +2,7 @@ import globals as g
 import supervisely_lib as sly
 
 
-def show(results):
+def show(results, fields):
     pred_tags_names = []
     pred_tags = []
     for item in results:
@@ -14,13 +14,12 @@ def show(results):
         pred_tags.append(tag_meta_json)
         pred_tags_names.append(tag_meta.name)
 
-    fields = [
-        {"field": "data.predTags", "payload": pred_tags},
-        {"field": "data.predTagsNames", "payload": pred_tags_names},
-        {"field": "state.activeNamesPred", "payload": pred_tags_names}
-    ]
-    g.api.task.set_fields(g.task_id, fields)
+    fields.update({
+        "data.predTags": pred_tags,
+        "data.predTagsNames": pred_tags_names,
+        "state.activeNamesPred": pred_tags_names
+    })
 
 
-def hide():
-    g.api.task.set_field(g.task_id, "data.predTags", None)
+def hide(fields):
+    fields["data.predTags"] = None
