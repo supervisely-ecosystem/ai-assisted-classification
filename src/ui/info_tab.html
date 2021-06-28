@@ -36,7 +36,7 @@
             >
                 Assign tag "{{tag.name}}" to selected object
             </el-button>
-            <sly-image-slider :data="data.tagsExamples[tag.name]"/>
+            <sly-image-slider v-if="data.tagsExamples.hasOwnProperty(tag.name)" :data="data.tagsExamples[tag.name]"/>
         </el-collapse-item>
     </el-collapse>
 </div>

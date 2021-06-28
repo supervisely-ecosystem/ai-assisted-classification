@@ -1,0 +1,37 @@
+<div class="ml5 mt5 mr5">
+    <div>If {{state.applyTo}} already has tags that model produces, they will be shown here. It helps to quickly review
+        assigned tags for quality assurance.
+    </div>
+    <div v-if="data.reviewTags">
+        <div class="mt10">
+            <b v-if="state.applyTo === 'object'">OBJECT ALREADY HAS THE FOLLOWING TAGS:</b>
+            <b v-if="state.applyTo === 'image'">IMAGE ALREADY HAS THE FOLLOWING TAGS:</b>
+        </div>
+        <div class="fflex">
+            <el-button type="text" size="mini"
+                       :disabled="data.reviewTags.length === state.activeNamesReview.length"
+                       @click="state.activeNamesReview = data.reviewTagsNames"
+            >
+                <i class="zmdi zmdi-unfold-more mr5"></i>Expand all
+            </el-button>
+            <el-button type="text" size="mini"
+                       :disabled="state.activeNamesReview.length == 0"
+                       @click="state.activeNamesReview = []"
+            >
+                <i class="zmdi zmdi-unfold-less mr5"></i>Collapse all
+            </el-button>
+        </div>
+    </div>
+
+    <el-collapse class="xxx" v-model="state.activeNamesReview" v-if="data.reviewTags">
+        <el-collapse-item v-for="tag in data.reviewTags" :name="tag.name">
+            <template slot="title">
+                    <span style="min-width: 35%; display: inline-block;">
+                        <i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}
+                    </span>
+                <b class="ml10">user: {{tag.labelerLogin}}</b>
+            </template>
+            <sly-image-slider v-if="data.tagsExamples.hasOwnProperty(tag.name)" :data="data.tagsExamples[tag.name]"/>
+        </el-collapse-item>
+    </el-collapse>
+</div>
