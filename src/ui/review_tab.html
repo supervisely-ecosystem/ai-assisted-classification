@@ -9,7 +9,7 @@
         </div>
         <div class="fflex">
             <el-button type="text" size="mini"
-                       :disabled="data.reviewTags.length === state.activeNamesReview.length"
+                       :disabled="data.reviewTags === state.activeNamesReview"
                        @click="state.activeNamesReview = data.reviewTagsNames"
             >
                 <i class="zmdi zmdi-unfold-more mr5"></i>Expand all

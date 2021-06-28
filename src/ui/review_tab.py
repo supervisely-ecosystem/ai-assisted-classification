@@ -9,17 +9,17 @@ def init(data, state):
     data["reviewTagsNames"] = None
 
 
-def init(tags, tags_names, active_names):
+def set_data(tags, tags_names, active_names):
     fields = [
         {"field": "state.activeNamesReview", "payload": list(set(active_names))},
         {"field": "data.reviewTags", "payload": tags},
-        {"field": "data.reviewTagsNames", "payload": list(set(tags_names))},
+        {"field": "data.reviewTagsNames", "payload": list(set(tags_names)) if tags_names is not None else tags_names},
     ]
     g.api.task.set_fields(g.task_id, fields)
 
 
 def reset():
-    init(tags=None, tags_names=None, active_names=[])
+    set_data(tags=None, tags_names=None, active_names=[])
 
 
 def refresh_figure(project_id, figure_id):
@@ -39,4 +39,4 @@ def refresh_figure(project_id, figure_id):
             if tag_meta is not None:
                 review_tags.append({**tag_meta.to_json(), "labelerLogin": tag.labeler_login})
                 reviewTagsNames.append(tag_meta.name)
-        init(review_tags, reviewTagsNames, activeNamesReview)
+        set_data(review_tags, reviewTagsNames, activeNamesReview)
