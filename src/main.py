@@ -40,6 +40,8 @@ def connect(api: sly.Api, task_id, context, state, app_logger):
 @g.my_app.ignore_errors_and_show_dialog_window()
 def next_object(api: sly.Api, task_id, context, state, app_logger):
     sly.logger.debug("Context", extra={"context": context})
+    g.api.task.set_field(g.task_id, "state.nextLoading", True)
+
     project_id = context["projectId"]
     image_id = context["imageId"]
     figure_id = context["figureId"]
@@ -62,6 +64,8 @@ def next_object(api: sly.Api, task_id, context, state, app_logger):
         g.my_app.show_modal_window("All figures are visited. Select another figure or clear selection to iterate over objects again")
         prediction.hide()
         review_tab.reset()
+
+    g.api.task.set_field(g.task_id, "state.nextLoading", False)
 
 
 @g.my_app.callback("manual_selected_image_changed")
@@ -95,6 +99,7 @@ def figure_changed(api: sly.Api, task_id, context, state, app_logger):
         review_tab.reset()
         return
 
+    g.api.task.set_field(g.task_id, "state.nextLoading", True)
     project_id = context["projectId"]
     image_id = context["imageId"]
     figure_id = context["figureId"]
@@ -103,6 +108,7 @@ def figure_changed(api: sly.Api, task_id, context, state, app_logger):
     results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
     prediction.show(results)
     review_tab.refresh_figure(project_id, figure_id)
+    g.api.task.set_field(g.task_id, "state.nextLoading", False)
 
 
 @g.my_app.callback("disconnect")
@@ -131,11 +137,16 @@ def assign_to_object(api: sly.Api, task_id, context, state, app_logger):
         review_tab.refresh_figure(project_id, figure_id)
         fields = [
             {"field": "state.assignLoading", "payload": False},
+            {"field": "state.nextLoading", "payload": False},
             {"field": "state.previousName", "payload": class_name},
         ]
         api.task.set_fields(task_id, fields)
     except Exception as e:
-        api.task.set_field(g.task_id, "state.assignLoading", False)
+        fields = [
+            {"field": "state.assignLoading", "payload": False},
+            {"field": "state.nextLoading", "payload": False},
+        ]
+        api.task.set_fields(task_id, fields)
         raise e
 
 
@@ -183,11 +194,16 @@ def mark_unknown(api: sly.Api, task_id, context, state, app_logger):
 
         fields = [
             {"field": "state.assignLoading", "payload": False},
+            {"field": "state.nextLoading", "payload": False},
             {"field": "state.previousName", "payload": g.unknown_tag_meta.name},
         ]
         api.task.set_fields(task_id, fields)
     except Exception as e:
-        api.task.set_field(g.task_id, "state.assignLoading", False)
+        fields = [
+            {"field": "state.assignLoading", "payload": False},
+            {"field": "state.nextLoading", "payload": False},
+        ]
+        api.task.set_fields(task_id, fields)
         raise e
 
 
@@ -206,9 +222,17 @@ def mark_as_previous(api: sly.Api, task_id, context, state, app_logger):
             review_tab.refresh_figure(project_id, figure_id)
         else:
             raise NotImplementedError()
-        api.task.set_field(g.task_id, "state.assignLoading", False)
+        fields = [
+            {"field": "state.assignLoading", "payload": False},
+            {"field": "state.nextLoading", "payload": False},
+        ]
+        api.task.set_fields(task_id, fields)
     except Exception as e:
-        api.task.set_field(g.task_id, "state.assignLoading", False)
+        fields = [
+            {"field": "state.assignLoading", "payload": False},
+            {"field": "state.nextLoading", "payload": False},
+        ]
+        api.task.set_fields(task_id, fields)
         raise e
 
 
@@ -221,6 +245,9 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
+
+#@TODO: single loading for everything
+#@TODO: loading on next object - wip nextLoading
 #@TODO: append vs replace
 #@TODO: remove tag in review
 #@TODO: image mode

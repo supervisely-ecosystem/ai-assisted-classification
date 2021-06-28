@@ -9,7 +9,9 @@
                        :plain="true"
                        :disabled="(!context.figureId && state.applyTo === 'object')"
                        :loading="state.assignLoading"
-                       @click="state.assignLoading = true; command('mark_as_previous');"
+                       @click="state.assignLoading = true;
+                               state.nextLoading = true;
+                               command('mark_as_previous');"
             >
                 Assign tag "{{state.previousName}}" to current {{state.applyTo}}
             </el-button>
@@ -40,8 +42,9 @@
                 <el-button v-if="state.applyTo === 'object'"
                            size="small" type="primary" class="mt5 ml5 mb5"
                            @click="state.assignLoading = true;
-                                                   state.assignName = tag.name;
-                                                   command('assign_to_object');"
+                                   state.nextLoading = true;
+                                   state.assignName = tag.name;
+                                   command('assign_to_object');"
                            :loading="state.assignLoading"
                            :disabled="!context.figureId"
                 >
@@ -59,7 +62,9 @@
                        :plain="true" type="warning"
                        :disabled="(!context.figureId && state.applyTo === 'object')"
                        :loading="state.assignLoading"
-                       @click="state.assignLoading = true; command('mark_unknown');"
+                       @click="state.assignLoading = true;
+                               state.nextLoading = true;
+                               command('mark_unknown');"
             >
                 Assign tag <span style="color: orange"><i class="zmdi zmdi-label"></i> "Unknown"</span> to current
                 {{state.applyTo}}

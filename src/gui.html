@@ -88,8 +88,12 @@
             <div class="app-header">
                 <div class="fflex" style="justify-content: space-between">
                     <div class="fflex">
-                        <el-button size="small" type="primary" class="mt5 ml5 mb5" v-if="state.applyTo === 'object'"
-                                   @click="command('next_object')">
+                        <el-button size="small" type="primary"
+                                   class="mt5 ml5 mb5"
+                                   v-if="state.applyTo === 'object'"
+                                   @click="command('next_object');"
+                                   :loading="state.nextLoading"
+                        >
                             Next {{state.applyTo}} <i class="zmdi zmdi-arrow-right ml5"></i>
                         </el-button>
                     </div>
