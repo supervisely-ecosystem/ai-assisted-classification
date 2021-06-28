@@ -6,7 +6,7 @@
                    :description="`if current ${state.applyTo} looks the same as previous one, you can quickly
                    assign previous result to current ${state.applyTo}`">
             <el-button size="small" class="mt5 ml5 mb5"
-                       :plain="true" type="warning"
+                       :plain="true"
                        :disabled="(!context.figureId && state.applyTo === 'object')"
                        :loading="state.assignLoading"
                        @click="state.assignLoading = true; command('mark_as_previous');"
