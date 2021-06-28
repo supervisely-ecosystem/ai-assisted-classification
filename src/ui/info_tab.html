@@ -1,10 +1,10 @@
 <div class="mt5 ml5 mr5">
-    <div><b>SESSION INFO:</b></div>
-    <div v-for="v,k in data.info" class="mt5" style="word-break: break-all;">
+    <div><b>CONNECTED MODEL</b></div>
+    <div v-for="v,k in data.info" style="word-break: break-all;">
         <b style="color: #777777;">{{k}}</b>: {{v}}
     </div>
 
-    <div class="mt10"><b>ALL MODEL CLASSES WITH EXAMPLES:</b></div>
+    <div class="mt10"><b>MODEL CLASSES</b></div>
     <div class="fflex" v-if="data.tags">
         <el-button type="text" size="mini"
                    :disabled="data.tags.length === state.activeNames.length"
