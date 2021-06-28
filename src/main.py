@@ -211,12 +211,7 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
-
-#@TODO: readme - add predict again example gif
-#@TODO: readme - model response - error
-#@TODO: unknown tag manually - show usage and explain in readme
 #@TODO: image mode
-#@TODO: iterate object - creation order - add to readme
 #@TODO: get errors from serve
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
