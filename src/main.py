@@ -107,8 +107,8 @@ def disconnect(api: sly.Api, task_id, context, state, app_logger):
     ui.init(new_data, new_state)
     cache.clear()
     fields = [
-        {"field": "data", "payload": new_data, "append": True},
-        {"field": "state", "payload": new_state, "append": True},
+        {"field": "data", "payload": new_data},
+        {"field": "state", "payload": new_state},
     ]
     api.task.set_fields(task_id, fields)
 
@@ -122,7 +122,11 @@ def assign_to_object(api: sly.Api, task_id, context, state, app_logger):
         figure_id = context["figureId"]
         class_name = state["assignName"]
         figure_utils.assign_to_object(project_id, figure_id, class_name)
-        api.task.set_field(g.task_id, "state.assignLoading", False)
+        fields = [
+            {"field": "state.assignLoading", "payload": False},
+            {"field": "state.previousName", "payload": class_name},
+        ]
+        api.task.set_fields(task_id, fields)
     except Exception as e:
         api.task.set_field(g.task_id, "state.assignLoading", False)
         raise e
@@ -167,6 +171,31 @@ def mark_unknown(api: sly.Api, task_id, context, state, app_logger):
             figure_utils._assign_tag_to_object(project_id, figure_id, g.unknown_tag_meta)
         else:
             raise NotImplementedError()
+
+        fields = [
+            {"field": "state.assignLoading", "payload": False},
+            {"field": "state.previousName", "payload": g.unknown_tag_meta.name},
+        ]
+        api.task.set_fields(task_id, fields)
+    except Exception as e:
+        api.task.set_field(g.task_id, "state.assignLoading", False)
+        raise e
+
+
+@g.my_app.callback("mark_as_previous")
+@sly.timeit
+@g.my_app.ignore_errors_and_show_dialog_window()
+def mark_as_previous(api: sly.Api, task_id, context, state, app_logger):
+    try:
+        project_id = context["projectId"]
+        image_id = context["imageId"]
+        figure_id = context["figureId"]
+        apply_to = state["applyTo"]
+
+        if apply_to == "object":
+            figure_utils.assign_to_object(project_id, figure_id, state["previousName"])
+        else:
+            raise NotImplementedError()
         api.task.set_field(g.task_id, "state.assignLoading", False)
     except Exception as e:
         api.task.set_field(g.task_id, "state.assignLoading", False)
@@ -182,7 +211,7 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
-#@TODO: font same size
+
 #@TODO: readme - add predict again example gif
 #@TODO: readme - model response - error
 #@TODO: unknown tag manually - show usage and explain in readme

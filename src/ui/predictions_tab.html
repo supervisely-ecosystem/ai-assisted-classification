@@ -1,5 +1,19 @@
 <div>
     <div v-if="data.predTags" class="ml5">
+        <sly-field style="margin-top: 15px;"
+                   v-if="state.previousName"
+                   title="Copy previous result"
+                   :description="`if current ${state.applyTo} looks the same as previous one, you can quickly
+                   assign previous result to current ${state.applyTo}`">
+            <el-button size="small" class="mt5 ml5 mb5"
+                       :plain="true" type="warning"
+                       :disabled="(!context.figureId && state.applyTo === 'object')"
+                       :loading="state.assignLoading"
+                       @click="state.assignLoading = true; command('mark_as_previous');"
+            >
+                Assign tag "{{state.previousName}}" to current {{state.applyTo}}
+            </el-button>
+        </sly-field>
         <div class="mt10"><b>TOP {{state.topn}} PREDICTIONS:</b></div>
         <div class="fflex" v-if="data.predTags">
             <el-button type="text" size="mini"
@@ -52,14 +66,16 @@
             </el-button>
         </sly-field>
     </div>
-    <div v-else class="ml5">
-<!--        <el-button size="small" class="mt5 ml5 mb5"-->
-<!--                   :loading="state.predictLoading"-->
-<!--                   :disabled="(!context.figureId && state.applyTo === 'object')"-->
-<!--                   @click="state.predictLoading = true; command('predict');"-->
-<!--        >-->
-<!--            Refresh predictions for selected {{state.applyTo}}-->
-<!--        </el-button>-->
-        Predictions will be shown here. Select {{state.applyTo}} or press "Refresh" button
-    </div>
+    <sly-field style="margin-top: 15px; margin-left: 5px;"
+               title="Manual refresh"
+               description="Model automatically produces predictions for selected item. Manual refresh is helpful if you
+               changed inference settings and would like to apply them to current item">
+        <el-button size="small" class="mt5 ml5 mb5"
+                   :loading="state.predictLoading"
+                   :disabled="(!context.figureId && state.applyTo === 'object')"
+                   @click="state.predictLoading = true; command('predict');"
+        >
+            Refresh predictions for selected {{state.applyTo}}
+        </el-button>
+    </sly-field>
 </div>

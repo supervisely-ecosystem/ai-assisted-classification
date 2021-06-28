@@ -3,3 +3,5 @@ def init(data, state):
     state["activeNamesPred"] = []
     data["predTags"] = None
     data["predTagsNames"] = None
+
+    state["previousName"] = None
