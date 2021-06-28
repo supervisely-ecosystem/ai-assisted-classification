@@ -8,10 +8,8 @@
             <el-button size="small" class="mt5 ml5 mb5"
                        :plain="true"
                        :disabled="(!context.figureId && state.applyTo === 'object')"
-                       :loading="state.assignLoading"
-                       @click="state.assignLoading = true;
-                               state.nextLoading = true;
-                               command('mark_as_previous');"
+                       :loading="state.loading"
+                       @click="command('mark_as_previous');"
             >
                 Assign tag "{{state.previousName}}" to current {{state.applyTo}}
             </el-button>
@@ -41,11 +39,9 @@
                 </template>
                 <el-button v-if="state.applyTo === 'object'"
                            size="small" type="primary" class="mt5 ml5 mb5"
-                           @click="state.assignLoading = true;
-                                   state.nextLoading = true;
-                                   state.assignName = tag.name;
+                           @click="state.assignName = tag.name;
                                    command('assign_to_object');"
-                           :loading="state.assignLoading"
+                           :loading="state.loading"
                            :disabled="!context.figureId"
                 >
                     Assign tag "{{tag.name}}" to selected object
@@ -61,10 +57,8 @@
             <el-button size="small" class="mt5 ml5 mb5"
                        :plain="true" type="warning"
                        :disabled="(!context.figureId && state.applyTo === 'object')"
-                       :loading="state.assignLoading"
-                       @click="state.assignLoading = true;
-                               state.nextLoading = true;
-                               command('mark_unknown');"
+                       :loading="state.loading"
+                       @click="command('mark_unknown');"
             >
                 Assign tag <span style="color: orange"><i class="zmdi zmdi-label"></i> "Unknown"</span> to current
                 {{state.applyTo}}
@@ -76,9 +70,9 @@
                description="Model automatically produces predictions for selected item. Manual refresh is helpful if you
                changed inference settings and would like to apply them to current item">
         <el-button size="small" class="mt5 ml5 mb5"
-                   :loading="state.predictLoading"
+                   :loading="state.loading"
                    :disabled="(!context.figureId && state.applyTo === 'object')"
-                   @click="state.predictLoading = true; command('predict');"
+                   @click="command('predict');"
         >
             Refresh predictions for selected {{state.applyTo}}
         </el-button>

@@ -9,8 +9,10 @@ import settings_tab
 
 
 def init(data, state):
-    state["connecting"] = False
-    state["nextLoading"] = False
+    state["loading"] = False
+
+    # state["connecting"] = False
+    # state["nextLoading"] = False
 
     data["ownerId"] = g.owner_id
     data["teamId"] = g.team_id

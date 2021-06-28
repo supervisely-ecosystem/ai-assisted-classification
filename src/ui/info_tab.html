@@ -28,10 +28,9 @@
             </template>
             <el-button v-if="state.applyTo === 'object'"
                        size="small" type="primary" class="mt5 ml5 mb5"
-                       @click="state.assignLoading = true;
-                                                   state.assignName = tag.name;
-                                                   command('assign_to_object');"
-                       :loading="state.assignLoading"
+                       @click="state.assignName = tag.name;
+                               command('assign_to_object');"
+                       :loading="state.loading"
                        :disabled="!context.figureId"
             >
                 Assign tag "{{tag.name}}" to selected object
