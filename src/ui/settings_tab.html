@@ -27,6 +27,8 @@
     <sly-field title="Cache"
                description="App caches metadata, images and annotations. Clear cache if you get
                                    special notifications from the app">
-        <el-button size="small" @click="command('clear_cache')">Clear cache</el-button>
+        <el-button size="small"
+                   :loading="state.loading"
+                   @click="state.loading = true; command('clear_cache')">Clear cache</el-button>
     </sly-field>
 </div>

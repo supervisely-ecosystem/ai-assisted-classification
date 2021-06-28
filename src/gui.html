@@ -72,7 +72,7 @@
                                size="small"
                                :disabled="!state.nnId"
                                :loading="state.loading"
-                               @click="command('connect')"
+                               @click="state.loading = true; command('connect');"
                     >
                         <i class="zmdi zmdi-refresh mr5"></i> Connect
                     </el-button>
@@ -91,7 +91,7 @@
                         <el-button size="small" type="primary"
                                    class="mt5 ml5 mb5"
                                    v-if="state.applyTo === 'object'"
-                                   @click="command('next_object');"
+                                   @click="state.loading = true; command('next_object');"
                                    :loading="state.loading"
                         >
                             Next {{state.applyTo}} <i class="zmdi zmdi-arrow-right ml5"></i>

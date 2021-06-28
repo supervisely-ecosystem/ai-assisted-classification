@@ -58,7 +58,7 @@
                        :plain="true" type="warning"
                        :disabled="(!context.figureId && state.applyTo === 'object')"
                        :loading="state.loading"
-                       @click="command('mark_unknown');"
+                       @click="state.loading = true; command('mark_unknown');"
             >
                 Assign tag <span style="color: orange"><i class="zmdi zmdi-label"></i> "Unknown"</span> to current
                 {{state.applyTo}}
@@ -72,7 +72,7 @@
         <el-button size="small" class="mt5 ml5 mb5"
                    :loading="state.loading"
                    :disabled="(!context.figureId && state.applyTo === 'object')"
-                   @click="command('predict');"
+                   @click="state.loading = true; command('predict');"
         >
             Refresh predictions for selected {{state.applyTo}}
         </el-button>
