@@ -26,10 +26,10 @@
     <el-collapse class="xxx" v-model="state.activeNamesReview" v-if="data.reviewTags">
         <el-collapse-item v-for="tag in data.reviewTags" :name="tag.name">
             <template slot="title">
-                    <span style="min-width: 35%; display: inline-block;">
-                        <i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}
-                    </span>
-                <b class="ml10">user: {{tag.labelerLogin}}</b>
+                <span style="min-width: 35%; display: inline-block;">
+                    <i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}
+                </span>
+                <span>user:<b class="ml10"> {{tag.labelerLogin}}</b></span>
             </template>
             <sly-image-slider v-if="data.tagsExamples.hasOwnProperty(tag.name)" :data="data.tagsExamples[tag.name]"/>
         </el-collapse-item>
