@@ -37,14 +37,13 @@
                     </span>
                     <b class="ml10">p={{tag.score}}</b>
                 </template>
-                <el-button v-if="state.applyTo === 'object'"
-                           size="small" type="primary" class="mt5 ml5 mb5"
+                <el-button size="small" type="primary" class="mt5 ml5 mb5"
                            @click="state.assignName = tag.name;
-                                   command('assign_to_object');"
+                                   command('assign_to_item');"
                            :loading="state.loading"
-                           :disabled="!context.figureId"
+                           :disabled="state.applyTo === 'object' && !context.figureId"
                 >
-                    Assign tag "{{tag.name}}" to selected object
+                    Assign tag "{{tag.name}}" to current {{state.applyTo}}
                 </el-button>
                 <sly-image-slider v-if="data.tagsExamples.hasOwnProperty(tag.name)" :data="data.tagsExamples[tag.name]"/>
             </el-collapse-item>

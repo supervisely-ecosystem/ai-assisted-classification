@@ -15,33 +15,47 @@ import iterate_objects
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def image_changed(api: sly.Api, task_id, context, state, app_logger):
-    api.task.set_field(task_id, "state.loading", True)
-    nn_session = state["nnId"]
-    if nn_session is None:
-        return
-    if state["applyTo"] == "object":
-        return
+    fields = {}
+    try:
+        nn_session = state["nnId"]
+        project_id = context["projectId"]
+        if nn_session is None:
+            return
+        if state["applyTo"] == "object":
+            return
+        api.task.set_field(task_id, "state.loading", True)
+        fields["state.loading"] = False
+
+        api.task.set_field(task_id, "state.loading", True)
+        image_id = context["imageId"]
+        results = tag_utils.classify_image(nn_session, image_id, state["topn"])
+
+        prediction.show(results, fields)
+        review_tab.refresh_image(project_id, image_id, fields)
+        api.task.set_fields_from_dict(task_id, fields)
+
+    except Exception as e:
+        api.task.set_fields_from_dict(task_id, fields)
+        raise e
 
 
 @g.my_app.callback("manual_selected_figure_changed")
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def figure_changed(api: sly.Api, task_id, context, state, app_logger):
-    api.task.set_field(task_id, "state.loading", True)
-    fields = {
-        "state.loading": False
-    }
+    fields = {}
     try:
+        sly.logger.debug("Context", extra={"context": context})
+
         project_id = context["projectId"]
         nn_session = state["nnId"]
         if nn_session is None:
-            api.task.set_fields_from_dict(task_id, fields)
+            return
+        if state["applyTo"] == "image":
             return
 
-        sly.logger.debug("Context", extra={"context": context})
-        if state["applyTo"] == "image":
-            api.task.set_fields_from_dict(task_id, fields)
-            return
+        api.task.set_field(task_id, "state.loading", True)
+        fields["state.loading"] = False
 
         figure_id = context.get("figureId", None)
         if figure_id is None:
@@ -78,5 +92,6 @@ def main():
 #@TODO: append vs replace
 #@TODO: image mode
 #@TODO: get errors from serve
+#@TODO: set image mode as default
 if __name__ == "__main__":
     sly.main_wrapper("main", main)

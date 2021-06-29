@@ -4,7 +4,7 @@ import cache
 
 
 def init(data, state):
-    state["applyTo"] = "object"  # "image" #@TODO: for debug
+    state["applyTo"] = "image" #"object"  # "image" #@TODO: for debug
     state["assignMode"] = "append"
     state["topn"] = 5
     state["pad"] = 10
