@@ -90,8 +90,5 @@ def main():
 
 #@TODO: release new SDK
 #@TODO: append vs replace
-#@TODO: image mode
-#@TODO: get errors from serve
-#@TODO: set image mode as default
 if __name__ == "__main__":
     sly.main_wrapper("main", main)

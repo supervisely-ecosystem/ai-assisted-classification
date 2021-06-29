@@ -56,7 +56,6 @@ def refresh_image(project_id, image_id, fields):
         reset(fields)
     else:
         project_meta = cache.get_meta(project_id)
-        g.api.advanced.get_object_tags()
         id_to_tagmeta = project_meta.tag_metas.get_id_mapping()
         image_info = g.api.image.get_info_by_id(image_id)
         img_tags = sly.TagCollection.from_api_response(image_info.tags, project_meta.tag_metas, id_to_tagmeta)
