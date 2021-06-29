@@ -108,5 +108,4 @@ def remove_from_image(project_id, image_id, tag_name, tag_id):
     project_tag_meta: sly.TagMeta = project_meta.get_tag_meta(tag_name)
     if project_tag_meta is None:
         raise RuntimeError(f"Tag {tag_name} not found in project meta")
-    #g.api.advanced.
-    g.api.advanced.remove_tag_from_object(project_tag_meta.sly_id, figure_id, tag_id)
+    g.api.advanced.remove_tag_from_image(project_tag_meta.sly_id, image_id, tag_id)
