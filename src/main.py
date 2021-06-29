@@ -88,7 +88,7 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
-#@TODO: release new SDK
+#@TODO: min instance version
 #@TODO: append vs replace
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
