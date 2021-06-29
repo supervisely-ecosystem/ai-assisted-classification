@@ -125,7 +125,6 @@ def mark_as_previous(api: sly.Api, task_id, context, state, app_logger):
         elif apply_to == "image":
             tag_utils.assign_to_image(project_id, image_id, state["previousName"])
             review_tab.refresh_image(project_id, image_id, fields)
-            raise NotImplementedError()
         api.task.set_fields_from_dict(task_id, fields)
     except Exception as e:
         api.task.set_fields_from_dict(task_id, fields)
