@@ -36,6 +36,13 @@
                 </span>
                 <span>user:<b class="ml10"> {{tag.labelerLogin}}</b></span>
             </template>
+            <el-button size="small" type="warning" class="mt5 ml5 mb5"
+                       @click="state.removeTagName = tag.name; state.removeTagId = tag.id; command('remove_tag');"
+                       :loading="state.loading"
+                       :disabled="state.applyTo === 'object' && !context.figureId"
+            >
+                Remove tag "{{tag.name}}" from selected {{state.applyTo}}
+            </el-button>
             <sly-image-slider v-if="data.tagsExamples.hasOwnProperty(tag.name)" :data="data.tagsExamples[tag.name]"/>
         </el-collapse-item>
     </el-collapse>

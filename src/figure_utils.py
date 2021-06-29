@@ -53,3 +53,11 @@ def _assign_tag_to_object(project_id, figure_id, tag_meta):
         project_meta = cache.get_meta(project_id)
         project_tag_meta = project_meta.get_tag_meta(tag_meta.name)
     g.api.advanced.add_tag_to_object(project_tag_meta.sly_id, figure_id)
+
+
+def remove_from_object(project_id, figure_id, tag_name, tag_id):
+    project_meta = cache.get_meta(project_id)
+    project_tag_meta: sly.TagMeta = project_meta.get_tag_meta(tag_name)
+    if project_tag_meta is None:
+        raise RuntimeError(f"Tag {tag_name} not found in project meta")
+    g.api.advanced.remove_tag_from_object(project_tag_meta.sly_id, figure_id, tag_id)
