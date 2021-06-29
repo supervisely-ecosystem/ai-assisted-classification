@@ -18,10 +18,12 @@ def init(data, state):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def assign_to_object(api: sly.Api, task_id, context, state, app_logger):
-    fields = {
-        "state.loading": False
-    }
     try:
+        api.task.set_field(task_id, "state.loading", True)
+        fields = {
+            "state.loading": False
+        }
+
         project_id = context["projectId"]
         figure_id = context["figureId"]
         class_name = state["assignName"]
@@ -38,10 +40,12 @@ def assign_to_object(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def predict(api: sly.Api, task_id, context, state, app_logger):
-    fields = {
-        "state.loading": False
-    }
     try:
+        api.task.set_field(task_id, "state.loading", True)
+        fields = {
+            "state.loading": False
+        }
+
         project_id = context["projectId"]
         image_id = context["imageId"]
         figure_id = context["figureId"]
@@ -66,10 +70,12 @@ def predict(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def mark_unknown(api: sly.Api, task_id, context, state, app_logger):
-    fields = {
-        "state.loading": False
-    }
     try:
+        api.task.set_field(task_id, "state.loading", True)
+        fields = {
+            "state.loading": False
+        }
+
         project_id = context["projectId"]
         image_id = context["imageId"]
         figure_id = context["figureId"]
@@ -90,10 +96,12 @@ def mark_unknown(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def mark_as_previous(api: sly.Api, task_id, context, state, app_logger):
-    fields = {
-        "state.loading": False
-    }
     try:
+        api.task.set_field(task_id, "state.loading", True)
+        fields = {
+            "state.loading": False
+        }
+
         project_id = context["projectId"]
         image_id = context["imageId"]
         figure_id = context["figureId"]

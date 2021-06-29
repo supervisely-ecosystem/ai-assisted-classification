@@ -1,4 +1,4 @@
-<div class="mt5 ml5 mr5">
+<div class="mt5 ml5 mr5" v-loading="state.loading" element-loading-text="Loading...">
     <div><b>CONNECTED MODEL</b></div>
     <div v-for="v,k in data.info" style="word-break: break-all;">
         <b style="color: #777777;">{{k}}</b>: {{v}}

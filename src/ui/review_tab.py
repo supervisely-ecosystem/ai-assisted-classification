@@ -39,3 +39,28 @@ def refresh_figure(project_id, figure_id, fields):
                 review_tags.append({**tag_meta.to_json(), "labelerLogin": tag.labeler_login})
                 reviewTagsNames.append(tag_meta.name)
         set_data(review_tags, reviewTagsNames, activeNamesReview, fields)
+
+
+# @g.my_app.callback("remove_tag")
+# @sly.timeit
+# @g.my_app.ignore_errors_and_show_dialog_window()
+# def mark_as_previous(api: sly.Api, task_id, context, state, app_logger):
+#     try:
+#         api.task.set_field(task_id, "state.loading", True)
+#         fields = {
+#             "state.loading": False
+#         }
+#         project_id = context["projectId"]
+#         image_id = context["imageId"]
+#         figure_id = context["figureId"]
+#         apply_to = state["applyTo"]
+#
+#         if apply_to == "object":
+#             figure_utils.assign_to_object(project_id, figure_id, state["previousName"])
+#             review_tab.refresh_figure(project_id, figure_id, fields)
+#         else:
+#             raise NotImplementedError()
+#         api.task.set_fields_from_dict(task_id, fields)
+#     except Exception as e:
+#         api.task.set_fields_from_dict(task_id, fields)
+#         raise e

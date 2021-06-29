@@ -77,6 +77,7 @@ def next_object(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def image_changed(api: sly.Api, task_id, context, state, app_logger):
+    api.task.set_field(task_id, "state.loading", True)
     nn_session = state["nnId"]
     if nn_session is None:
         return
@@ -88,11 +89,11 @@ def image_changed(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def figure_changed(api: sly.Api, task_id, context, state, app_logger):
+    api.task.set_field(task_id, "state.loading", True)
     fields = {
         "state.loading": False
     }
     try:
-
         project_id = context["projectId"]
         nn_session = state["nnId"]
         if nn_session is None:
