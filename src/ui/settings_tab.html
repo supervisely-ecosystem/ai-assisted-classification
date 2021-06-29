@@ -9,7 +9,7 @@
                description="Tag will be appended to existing ones (duplicates are allowed). Or if object
                                    or image has some of the model tags, they will be replaced"
     >
-        <el-select v-model="state.assignMode" size="small">
+        <el-select v-model="state.assignMode" size="small" :disabled="true">
             <el-option key="append" label="append" value="append"></el-option>
             <el-option key="replace" label="replace" value="replace"></el-option>
         </el-select>

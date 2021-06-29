@@ -2,7 +2,7 @@ import supervisely_lib as sly
 import globals as g
 import cache
 import review_tab
-import figure_utils
+import tag_utils
 
 
 def init(data, state):
@@ -65,7 +65,7 @@ def remove_tag(api: sly.Api, task_id, context, state, app_logger):
         apply_to = state["applyTo"]
 
         if apply_to == "object":
-            figure_utils.remove_from_object(project_id, figure_id, state["removeTagName"], state["removeTagId"])
+            tag_utils.remove_from_object(project_id, figure_id, state["removeTagName"], state["removeTagId"])
             review_tab.refresh_figure(project_id, figure_id, fields)
         else:
             raise NotImplementedError()

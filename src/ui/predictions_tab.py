@@ -1,6 +1,6 @@
 import supervisely_lib as sly
 import globals as g
-import figure_utils
+import tag_utils
 import review_tab
 import cache
 import prediction
@@ -27,7 +27,7 @@ def assign_to_object(api: sly.Api, task_id, context, state, app_logger):
         project_id = context["projectId"]
         figure_id = context["figureId"]
         class_name = state["assignName"]
-        figure_utils.assign_to_object(project_id, figure_id, class_name)
+        tag_utils.assign_to_object(project_id, figure_id, class_name)
         review_tab.refresh_figure(project_id, figure_id, fields)
         fields["state.previousName"] = class_name
         api.task.set_fields_from_dict(task_id, fields)
@@ -54,7 +54,7 @@ def predict(api: sly.Api, task_id, context, state, app_logger):
 
         if apply_to == "object":
             ann = cache.get_annotation(project_id, image_id)
-            results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
+            results = tag_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
             prediction.show(results, fields)
             review_tab.refresh_figure(project_id, figure_id, fields)
         elif apply_to == "image":
@@ -81,7 +81,7 @@ def mark_unknown(api: sly.Api, task_id, context, state, app_logger):
         figure_id = context["figureId"]
         apply_to = state["applyTo"]
         if apply_to == "object":
-            figure_utils._assign_tag_to_object(project_id, figure_id, g.unknown_tag_meta)
+            tag_utils._assign_tag_to_object(project_id, figure_id, g.unknown_tag_meta)
             review_tab.refresh_figure(project_id, figure_id, fields)
         else:
             raise NotImplementedError()
@@ -108,7 +108,7 @@ def mark_as_previous(api: sly.Api, task_id, context, state, app_logger):
         apply_to = state["applyTo"]
 
         if apply_to == "object":
-            figure_utils.assign_to_object(project_id, figure_id, state["previousName"])
+            tag_utils.assign_to_object(project_id, figure_id, state["previousName"])
             review_tab.refresh_figure(project_id, figure_id, fields)
         else:
             raise NotImplementedError()

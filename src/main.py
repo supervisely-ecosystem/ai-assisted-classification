@@ -1,76 +1,14 @@
 import supervisely_lib as sly
 import globals as g
 import cache
-import figure_utils
 import prediction
 import ui
-import info_tab
 import review_tab
+import tag_utils
 
-
-def handle_model_errors(data):
-    if "error" in data:
-        raise RuntimeError(data["error"])
-    return data
-
-
-@g.my_app.callback("connect")
-@sly.timeit
-@g.my_app.ignore_errors_and_show_dialog_window()
-def connect(api: sly.Api, task_id, context, state, app_logger):
-    try:
-        fields = {
-            "state.loading": False
-        }
-        g.model_info = handle_model_errors(
-            api.task.send_request(state["nnId"], "get_session_info", data={})
-        )
-        model_meta_json = handle_model_errors(
-            api.task.send_request(state["nnId"], "get_model_meta", data={})
-        )
-        g.model_meta = sly.ProjectMeta.from_json(model_meta_json)
-        g.tags_examples = handle_model_errors(
-            api.task.send_request(state["nnId"], "get_tags_examples", data={})
-        )
-        info_tab.set_model_info(task_id, api, g.model_info, g.model_meta.tag_metas, g.tags_examples, fields)
-        api.task.set_fields_from_dict(task_id, fields)
-    except Exception as e:
-        api.task.set_fields_from_dict(task_id, fields)
-        raise e
-
-
-@g.my_app.callback("next_object")
-@sly.timeit
-@g.my_app.ignore_errors_and_show_dialog_window()
-def next_object(api: sly.Api, task_id, context, state, app_logger):
-    try:
-        fields = {
-            "state.loading": False
-        }
-        sly.logger.debug("Context", extra={"context": context})
-        project_id = context["projectId"]
-        image_id = context["imageId"]
-        figure_id = context["figureId"]
-        ann_tool_session = context["sessionId"]
-        ann = cache.get_annotation(project_id, image_id)
-        if len(ann.labels) == 0:
-            g.my_app.show_modal_window("There are no figures on image")
-        else:
-            next_figure_id = figure_utils.get_next(ann, figure_id)
-            if next_figure_id is not None:
-                api.img_ann_tool.set_figure(ann_tool_session, next_figure_id)
-                api.img_ann_tool.zoom_to_figure(ann_tool_session, next_figure_id, zoom_factor=2)
-                results = figure_utils.classify(state["nnId"], image_id, state["topn"], ann, next_figure_id, state["pad"])
-                prediction.show(results, fields)
-                review_tab.refresh_figure(project_id, next_figure_id, fields)
-            else:
-                g.my_app.show_modal_window("All figures are visited. Select another figure or clear selection to iterate over objects again")
-                prediction.hide(fields)
-                review_tab.reset(fields)
-        api.task.set_fields_from_dict(task_id, fields)
-    except Exception as e:
-        api.task.set_fields_from_dict(task_id, fields)
-        raise e
+# to register callbacks
+import connection
+import iterate_objects
 
 
 @g.my_app.callback("manual_selected_image_changed")
@@ -118,27 +56,13 @@ def figure_changed(api: sly.Api, task_id, context, state, app_logger):
         figure_id = context["figureId"]
 
         ann = cache.get_annotation(project_id, image_id)
-        results = figure_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
+        results = tag_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
         prediction.show(results, fields)
         review_tab.refresh_figure(project_id, figure_id, fields)
         api.task.set_fields_from_dict(task_id, fields)
     except Exception as e:
         api.task.set_fields_from_dict(task_id, fields)
         raise e
-
-
-@g.my_app.callback("disconnect")
-@sly.timeit
-def disconnect(api: sly.Api, task_id, context, state, app_logger):
-    new_data = {}
-    new_state = {}
-    ui.init(new_data, new_state)
-    cache.clear()
-    fields = [
-        {"field": "data", "payload": new_data},
-        {"field": "state", "payload": new_state},
-    ]
-    api.task.set_fields(task_id, fields)
 
 
 def main():
@@ -152,7 +76,6 @@ def main():
 
 
 #@TODO: append vs replace
-#@TODO: remove tag in review
 #@TODO: image mode
 #@TODO: get errors from serve
 if __name__ == "__main__":

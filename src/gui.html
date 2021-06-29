@@ -91,6 +91,14 @@
                         <el-button size="small" type="primary"
                                    class="mt5 ml5 mb5"
                                    v-if="state.applyTo === 'object'"
+                                   @click="state.loading = true; command('prev_object');"
+                                   :loading="state.loading"
+                        >
+                            <i class="zmdi zmdi-arrow-left ml5"></i> Prev {{state.applyTo}}
+                        </el-button>
+                        <el-button size="small" type="primary"
+                                   class="mt5 ml5 mb5"
+                                   v-if="state.applyTo === 'object'"
                                    @click="state.loading = true; command('next_object');"
                                    :loading="state.loading"
                         >
