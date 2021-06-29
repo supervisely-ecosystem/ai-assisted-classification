@@ -25,7 +25,7 @@ def assign_to_item(api: sly.Api, task_id, context, state, app_logger):
         }
 
         project_id = context["projectId"]
-        image_id = context["imaegId"]
+        image_id = context["imageId"]
         figure_id = context["figureId"]
         class_name = state["assignName"]
         apply_to = state["applyTo"]
