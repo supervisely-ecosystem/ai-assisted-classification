@@ -2,10 +2,9 @@
   "name": "AI assisted classification",
   "type": "app",
   "categories": [
-    "neural network",
     "labeling"
   ],
-  "description": "Use deployed neural network in labeling interface",
+  "description": "Use neural network in labeling interface to classify images and objects",
   "docker_image": "supervisely/base-py-sdk:6.1.86",
   "main_script": "annotation-tool/src/main.py",
   "gui_template": "annotation-tool/src/gui.html",
@@ -15,7 +14,7 @@
   "headless": false,
   "integrated_into": ["image_annotation_tool"],
 
-  "icon": "https://i.imgur.com/nnB2BqW.png",
+  "icon": "https://i.imgur.com/8UbfUjl.png",
   "icon_background": "#FFFFFF",
   "hotkeys": [
       {"hotkey": "ctrl+m", "command": "inference"}
