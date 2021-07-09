@@ -38,6 +38,7 @@ def _refresh_tags(project_meta: sly.ProjectMeta, tags_collection: sly.TagCollect
                 "id": tag.sly_id
             })
             reviewTagsNames.append(tag_meta.name)
+            activeNamesReview.append(tag_meta.name)
     set_data(review_tags, reviewTagsNames, activeNamesReview, fields)
 
 
