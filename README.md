@@ -9,7 +9,7 @@
 </p>
 
 
-[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/nn-image-labeling/annotation-tool)
+[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/ai-assisted-classification)
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/ai-assisted-classification)
 [![views](https://app.supervise.ly/public/api/v3/ecosystem.counters?repo=supervisely-ecosystem/ai-assisted-classification&counter=views&label=views)](https://supervise.ly)
@@ -20,33 +20,30 @@
 
 # Overview
 
-Classification model can be integrated into labeling interface and significantly speed up manual images and objects tagging:
+Classification model can be integrated into labeling interface and significantly speed up manual classification / tagging of images and objects:
 1. Model predicts most probable tags
 2. Labeler visually compare predictions with target image/object and assign the correct tag
-3. Also app allows to review already assigned tags
+3. Also app allows to review and correct already assigned tags
+
+<img src="https://i.imgur.com/oNwH6wn.png">
 
 This approach significantly outperforms manual labeling especially when annotator has to select one of hundred or even 
 thousand of tags. For example, in retail there are huge catalogs, and it is time-consuming and almost impossible to tag 
 objects on shelves without special tool.
 
-Watch demo: 
 
-<a data-key="sly-embeded-video-link" href="https://youtu.be/eWAvbmkm6JQ" data-video-code="eWAvbmkm6JQ">
-    <img src="https://i.imgur.com/ODlVoBh.png" alt="SLY_EMBEDED_VIDEO_LINK"  style="max-width:100%;">
-</a>
 
 # How To Run
-1. Add app from Ecosystem to your team if it is not there
+
+1. Add [app](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/ai-assisted-classification) from Ecosystem to your team if it is not there
 2. Deploy classification model
 3. Run app from labeling interface
 
 # How To Use
 
-0. Connect to deployed classification model
-1. Be sure that NN you are going to use is deployed in your team
-2. To start using app, user has to run it (from Team Apps page or directly in labeling UI) or open already running session. App doesn't support multiuser mode: it means that every user has to run its own session, BUT multiple sessions can connect to a single NN. 
-   
-    For example: There are 5 labelers in your team and you would like to use YOLOv5. In that case you should have at least one session of the deployed NN and run separate sessions for every user.
+<a data-key="sly-embeded-video-link" href="https://youtu.be/jsekl7Zer3Q" data-video-code="jsekl7Zer3Q">
+    <img src="https://i.imgur.com/rC0T16K.png" alt="SLY_EMBEDED_VIDEO_LINK"  style="max-width:70%;">
+</a>
 
 
 
