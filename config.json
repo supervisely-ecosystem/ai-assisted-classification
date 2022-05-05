@@ -8,16 +8,20 @@
   "docker_image": "supervisely/base-py-sdk:6.1.90",
   "main_script": "src/main.py",
   "gui_template": "src/gui.html",
-
   "task_location": "application_sessions",
   "isolate": true,
   "headless": false,
-  "integrated_into": ["image_annotation_tool"],
-
+  "integrated_into": [
+    "image_annotation_tool"
+  ],
   "icon": "https://i.imgur.com/8UbfUjl.png",
   "icon_background": "#FFFFFF",
   "hotkeys": [
-      {"hotkey": "ctrl+m", "command": "inference"}
+    {
+      "hotkey": "ctrl+m",
+      "command": "inference"
+    }
   ],
-  "instance_version": "6.4.20"
+  "instance_version": "6.4.20",
+  "poster": "https://i.imgur.com/hh0VJ0S.png"
 }
