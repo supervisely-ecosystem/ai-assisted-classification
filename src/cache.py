@@ -27,13 +27,18 @@ def get_meta(project_id, optimize=True):
 
 
 def get_annotation(project_id, image_id, optimize=True):
-    ann = None
-    if image_id not in image2ann or optimize is False:
-        ann_json = g.api.annotation.download(image_id).annotation
-        ann = sly.Annotation.from_json(ann_json, get_meta(project_id))
-        image2ann[image_id] = ann
-    else:
-        ann = image2ann[image_id]
+#     ann = None  
+#     if image_id not in image2ann or optimize is False:
+#         ann_json = g.api.annotation.download(image_id).annotation
+#         ann = sly.Annotation.from_json(ann_json, get_meta(project_id))
+#         image2ann[image_id] = ann
+#     else:
+#         ann = image2ann[image_id]
+
+    # annotations will be downloaded from server until we can't annotations change signal from frontend
+    
+    ann_json = g.api.annotation.download(image_id).annotation
+    ann = sly.Annotation.from_json(ann_json, get_meta(project_id))
     return ann
 
 
