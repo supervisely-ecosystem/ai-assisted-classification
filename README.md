@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src="https://user-images.githubusercontent.com/106374579/183400675-0179be6c-828b-4a5c-a7ad-1948030d745c.png)"/>
+<img src="https://user-images.githubusercontent.com/106374579/183400675-0179be6c-828b-4a5c-a7ad-1948030d745c.png"/>
 
 # AI assisted classification and tagging
 
