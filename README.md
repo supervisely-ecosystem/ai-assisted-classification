@@ -24,7 +24,7 @@ Classification model can be integrated into labeling interface and significantly
 2. Labeler visually compare predictions with target image/object and assign the correct tag
 3. Also app allows to review and correct already assigned tags
 
-<img src="https://i.imgur.com/oNwH6wn.png">
+<img src="media/68747470733a2f2f692e696d6775722e636f6d2f6f4e774836776e2e706e67.png">
 
 This approach significantly outperforms manual labeling especially when annotator has to select one of hundred or even 
 thousand of tags. For example, in retail there are huge catalogs, and it is time-consuming and almost impossible to tag 
@@ -41,7 +41,7 @@ objects on shelves without special tool.
 # How To Use
 
 <a data-key="sly-embeded-video-link" href="https://youtu.be/jsekl7Zer3Q" data-video-code="jsekl7Zer3Q">
-    <img src="https://i.imgur.com/rC0T16K.png" alt="SLY_EMBEDED_VIDEO_LINK"  style="max-width:70%;">
+    <img src="media/68747470733a2f2f692e696d6775722e636f6d2f7243305431364b2e706e67.png" alt="SLY_EMBEDED_VIDEO_LINK"  style="max-width:70%;">
 </a>
 
 
