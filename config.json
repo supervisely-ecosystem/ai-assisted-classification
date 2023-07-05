@@ -18,7 +18,7 @@
   "integrated_into": [
     "image_annotation_tool"
   ],
-  "icon": "https://i.imgur.com/8UbfUjl.png",
+  "icon": "media/icon.png",
   "icon_background": "#FFFFFF",
   "hotkeys": [
     {
