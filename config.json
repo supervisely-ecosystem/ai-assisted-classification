@@ -1,31 +1,31 @@
 {
-  "name": "AI assisted classification",
-  "type": "app",
-  "categories": [
-    "neural network",
-    "images",
-    "classification",
-    "inference interfaces",
-    "labeling"
-  ],
-  "description": "Use neural network in labeling interface to classify images and objects",
-  "docker_image": "supervisely/base-py-sdk:6.72.70",
-  "main_script": "src/main.py",
-  "gui_template": "src/gui.html",
-  "task_location": "application_sessions",
-  "isolate": true,
-  "headless": false,
-  "integrated_into": [
-    "image_annotation_tool"
-  ],
-  "icon": "https://i.imgur.com/8UbfUjl.png",
-  "icon_background": "#FFFFFF",
-  "hotkeys": [
-    {
-      "hotkey": "ctrl+m",
-      "command": "inference"
-    }
-  ],
-  "instance_version": "6.4.20",
-  "poster": "https://user-images.githubusercontent.com/106374579/183400675-0179be6c-828b-4a5c-a7ad-1948030d745c.png"
+    "name": "AI assisted classification",
+    "type": "app",
+    "categories": [
+        "neural network",
+        "images",
+        "classification",
+        "inference interfaces",
+        "labeling"
+    ],
+    "description": "Use neural network in labeling interface to classify images and objects",
+    "docker_image": "supervisely/labeling:0.0.1",
+    "main_script": "src/main.py",
+    "gui_template": "src/gui.html",
+    "task_location": "application_sessions",
+    "isolate": true,
+    "headless": false,
+    "integrated_into": [
+        "image_annotation_tool"
+    ],
+    "icon": "https://i.imgur.com/8UbfUjl.png",
+    "icon_background": "#FFFFFF",
+    "hotkeys": [
+        {
+            "hotkey": "ctrl+m",
+            "command": "inference"
+        }
+    ],
+    "instance_version": "6.4.20",
+    "poster": "https://user-images.githubusercontent.com/106374579/183400675-0179be6c-828b-4a5c-a7ad-1948030d745c.png"
 }
