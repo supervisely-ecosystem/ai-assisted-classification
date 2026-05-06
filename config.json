@@ -9,7 +9,7 @@
         "labeling"
     ],
     "description": "Use neural network in labeling interface to classify images and objects",
-    "docker_image": "supervisely/labeling:0.0.5",
+    "docker_image": "supervisely/labeling:6.73.564",
     "main_script": "src/main.py",
     "gui_template": "src/gui.html",
     "task_location": "application_sessions",
