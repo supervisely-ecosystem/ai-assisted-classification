@@ -1,35 +1,37 @@
 {
-    "name": "AI assisted classification",
-    "type": "app",
-    "categories": [
-        "neural network",
-        "images",
-        "classification",
-        "inference interfaces",
-        "labeling"
-    ],
-    "description": "Use neural network in labeling interface to classify images and objects",
-    "docker_image": "supervisely/labeling:0.0.5",
-    "main_script": "src/main.py",
-    "gui_template": "src/gui.html",
-    "task_location": "application_sessions",
-    "isolate": true,
-    "headless": false,
-    "integrated_into": [
-        "image_annotation_tool"
-    ],
-    "icon": "https://i.imgur.com/8UbfUjl.png",
-    "icon_background": "#FFFFFF",
-    "hotkeys": [
-        {
-            "hotkey": "ctrl+m",
-            "command": "inference"
-        }
-    ],
-    "instance_version": "6.4.20",
-    "poster": "https://user-images.githubusercontent.com/106374579/183400675-0179be6c-828b-4a5c-a7ad-1948030d745c.png",
-    "access_restriction": [{
-        "instance": "community_free",
-        "message": "The best interactive models for AI-assisted segmentation are already deployed in the Supervisely Cloud and are available for auto-labeling to all platform users. The number of API calls and the ability to run this app on your own agent (GPU) are limited for Free accounts. To increase usage limits or run the app on your GPU, switch to the <a href=\"/billing\">Pro</a> plan or request the <a href=\"https://supervisely.com/contact-us/\" target=\"_blank\">Enterprise</a> Edition."
-    }]
+  "name": "AI assisted classification",
+  "type": "app",
+  "categories": [
+    "neural network",
+    "images",
+    "classification",
+    "inference interfaces",
+    "labeling"
+  ],
+  "description": "Use neural network in labeling interface to classify images and objects",
+  "docker_image": "supervisely/base-py-sdk:6.73.564",
+  "main_script": "src/main.py",
+  "gui_template": "src/gui.html",
+  "task_location": "application_sessions",
+  "isolate": true,
+  "headless": false,
+  "integrated_into": [
+    "image_annotation_tool"
+  ],
+  "icon": "https://i.imgur.com/8UbfUjl.png",
+  "icon_background": "#FFFFFF",
+  "hotkeys": [
+    {
+      "hotkey": "ctrl+m",
+      "command": "inference"
+    }
+  ],
+  "instance_version": "6.15.60",
+  "poster": "https://user-images.githubusercontent.com/106374579/183400675-0179be6c-828b-4a5c-a7ad-1948030d745c.png",
+  "access_restriction": [
+    {
+      "instance": "community_free",
+      "message": "The best interactive models for AI-assisted segmentation are already deployed in the Supervisely Cloud and are available for auto-labeling to all platform users. The number of API calls and the ability to run this app on your own agent (GPU) are limited for Free accounts. To increase usage limits or run the app on your GPU, switch to the <a href=\"/billing\">Pro</a> plan or request the <a href=\"https://supervisely.com/contact-us/\" target=\"_blank\">Enterprise</a> Edition."
+    }
+  ]
 }

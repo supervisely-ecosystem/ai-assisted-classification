@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 import os
-import supervisely_lib as sly
+import supervisely as sly
 
 root_source_dir = str(Path(sys.argv[0]).parents[1])
 sly.logger.info(f"Root source directory: {root_source_dir}")

@@ -1,5 +1,5 @@
 import globals as g
-import supervisely_lib as sly
+import supervisely as sly
 
 
 def show(results, fields):
